@@ -1,0 +1,43 @@
+﻿@model WebApplication2.ViewModels.Enterance.RegisterViewModel
+
+<div class="mb-3">
+    <h3 class="text-center mb-4">Registration</h3>
+
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div> <!-- Додайте це -->
+
+        <div class="mb-3">
+            <label asp-for="Username" class="form-label">Username</label>
+            <input asp-for="Username" class="form-control" />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Password" class="form-label">Password</label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ComfirmPassword" class="form-label">Confirm Password</label>
+            <input asp-for="ComfirmPassword" type="password" class="form-control" />
+            <span asp-validation-for="ComfirmPassword" class="text-danger"></span>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2 fw-semibold">Register</button>
+
+        <div class="text-center mt-3">
+            <a href="/Enterance/Login">I already have an account</a>
+        </div>
+    </form>
+</div>
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}
