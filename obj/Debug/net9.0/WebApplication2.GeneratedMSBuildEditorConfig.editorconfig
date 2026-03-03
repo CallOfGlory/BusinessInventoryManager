@@ -1,5 +1,7 @@
 is_global = true
 build_property.TargetFramework = net9.0
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
 build_property.TargetPlatformMinVersion = 
 build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
@@ -9,65 +11,65 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WebApplication2
 build_property.RootNamespace = WebApplication2
-build_property.ProjectDir = C:\Users\46720\OneDrive - Hardenhuish School\Desktop\Calculation\WebApplication2\WebApplication2\
+build_property.ProjectDir = C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\46720\OneDrive - Hardenhuish School\Desktop\Calculation\WebApplication2\WebApplication2
+build_property.MSBuildProjectDirectory = C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Enterance/Index.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Enterance/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50ZXJhbmNlXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Enterance/Login.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Enterance/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50ZXJhbmNlXExvZ2luLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Enterance/Register.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Enterance/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50ZXJhbmNlXFJlZ2lzdGVyLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Enterance/_ViewImports.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Enterance/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50ZXJhbmNlXF9WaWV3SW1wb3J0cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Enterance/_ViewStart.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Enterance/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW50ZXJhbmNlXF9WaWV3U3RhcnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Home/Index.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Home/Privacy.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Shared/Error.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Shared/_LoyoutEnterance.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Shared/_LoyoutEnterance.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb3lvdXRFbnRlcmFuY2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/_ViewImports.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/_ViewStart.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/46720/OneDrive - Hardenhuish School/Desktop/Calculation/WebApplication2/WebApplication2/Views/Shared/_Layout.cshtml]
+[C:/Users/Oleksii\#/Desktop/NEA/BusinessInventoryManager/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-amt9qciysm

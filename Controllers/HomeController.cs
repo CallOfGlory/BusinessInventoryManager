@@ -1,9 +1,12 @@
-using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using WebApplication2.Models;
 
 namespace WebApplication2.Controllers;
 
+
+[Authorize]
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
@@ -15,6 +18,13 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+
+        var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+        foreach (var claim in allClaims)
+        {
+            _logger.LogInformation($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
+        }
+
         return View();
     }
 
