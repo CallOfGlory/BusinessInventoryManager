@@ -44,9 +44,9 @@ namespace WebApplication2.Repositories
             };
 
             _applicationContext.Users.Add(user);
-            _applicationContext.SaveChanges();
+            await _applicationContext.SaveChangesAsync();
 
-            return userRecived;
+            return user;
         }
     }
 }

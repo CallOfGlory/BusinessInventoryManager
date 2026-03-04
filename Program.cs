@@ -15,9 +15,14 @@ namespace WebApplication2
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //builder.Services.AddDbContext<ApplicationContext>(opts =>
+            //{
+            //    opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            //});
+            
             builder.Services.AddDbContext<ApplicationContext>(opts =>
             {
-                opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                opts.UseInMemoryDatabase("BusinessInventoryManagment");
             });
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -26,8 +31,8 @@ namespace WebApplication2
                     options.LoginPath = "/Enterance/Login";
                     options.LogoutPath = "/Enterance/Logout";
                     options.AccessDeniedPath = "/Home/Error";
-                    options.ExpireTimeSpan = TimeSpan.FromDays(7); // Термін дії cookie
-                    options.SlidingExpiration = true; // Поновлювати термін при активності
+                    options.ExpireTimeSpan = TimeSpan.FromDays(7); // пїЅпїЅпїЅпїЅпїЅ дії cookie
+                    options.SlidingExpiration = true; // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     options.Cookie.HttpOnly = true;
                     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
                     options.Cookie.SameSite = SameSiteMode.Lax;

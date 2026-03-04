@@ -64,6 +64,10 @@ public class EnteranceController : Controller
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        Console.WriteLine(model.Username);
+        Console.WriteLine(model.Email);
+        Console.WriteLine(model.Password);
+        
         if (!ModelState.IsValid)
         {
             return View(model);
@@ -78,12 +82,16 @@ public class EnteranceController : Controller
         try
         {
             UserModel userRecived = await _entranceService.Register(registerModel);
+            Console.WriteLine(userRecived.Id);
+            Console.WriteLine(userRecived.Email);
+            
             await _claimsService.AddClaimsAsync(userRecived.Id, userRecived.Email, HttpContext);
-
         }
         catch (Exception e)
         {
+            Console.WriteLine("---- ERROR ----");
             Console.WriteLine(e.Message);
+            Console.WriteLine(e);
             return View(model);
         }
 
