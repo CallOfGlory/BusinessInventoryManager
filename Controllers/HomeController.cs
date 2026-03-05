@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApplication2.Models;
+using WebApplication2.Services.Interface;
 
 namespace WebApplication2.Controllers;
 
@@ -10,20 +11,18 @@ namespace WebApplication2.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly IClaimsService _claimsService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IClaimsService claimsService)
     {
         _logger = logger;
+        _claimsService = claimsService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
 
-        var allClaims = User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-        foreach (var claim in allClaims)
-        {
-            _logger.LogInformation($"Claim Type: {claim.Type}, Claim Value: {claim.Value}");
-        }
+        var allClaims = await _claimsService.GetClaimsAsync(HttpContext);
 
         return View();
     }

@@ -450,3 +450,4 @@ C:\Users\46720\RiderProjects\BusinessInventoryManager\obj\Debug\net10.0\WebAppli
 C:\Users\46720\RiderProjects\BusinessInventoryManager\obj\Debug\net10.0\WebApplication2.genruntimeconfig.cache
 C:\Users\46720\RiderProjects\BusinessInventoryManager\obj\Debug\net10.0\ref\WebApplication2.dll
 C:\Users\46720\RiderProjects\BusinessInventoryManager\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.InMemory.dll
