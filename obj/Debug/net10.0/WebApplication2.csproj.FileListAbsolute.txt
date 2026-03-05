@@ -224,7 +224,6 @@ C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\runtime
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\WebApplication2.csproj.AssemblyReference.cache
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\WebAppli.0DB3FC1A.Up2Date
-C:\Users\46720\RiderProjects\BusinessInventoryManager\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\46720\RiderProjects\BusinessInventoryManager\bin\Debug\net10.0\appsettings.json
 C:\Users\46720\RiderProjects\BusinessInventoryManager\bin\Debug\net10.0\WebApplication2.staticwebassets.runtime.json
 C:\Users\46720\RiderProjects\BusinessInventoryManager\bin\Debug\net10.0\WebApplication2.staticwebassets.endpoints.json

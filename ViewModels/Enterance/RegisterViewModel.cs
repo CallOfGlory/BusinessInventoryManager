@@ -9,6 +9,7 @@ public class RegisterViewModel
     
     [Required(ErrorMessage = "Enter Email")]
     [EmailAddress(ErrorMessage = "Enter Email")]
+    [Remote]
     public string Email { get; set; }
     
     [Required(ErrorMessage = "Enter Password")] // Додайте це
