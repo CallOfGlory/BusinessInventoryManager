@@ -15,15 +15,15 @@ namespace WebApplication2
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //builder.Services.AddDbContext<ApplicationContext>(opts =>
-            //{
-            //    opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-            //});
-            
             builder.Services.AddDbContext<ApplicationContext>(opts =>
             {
-                opts.UseInMemoryDatabase("BusinessInventoryManagment");
+                opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            //builder.Services.AddDbContext<ApplicationContext>(opts =>
+            //{
+            //    opts.UseInMemoryDatabase("BusinessInventoryManagment");
+            //});
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -41,8 +41,16 @@ namespace WebApplication2
 
             builder.Services.AddAuthorization();
 
+            // Репозиторії (CRUD)
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IEntranceRepository, EntranceRepository>();
+
+            // Сервіси (бізнес-логіка)
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IEnteranceService, EnteranceService>();
             builder.Services.AddScoped<IClaimsService, ClaimsService>();
+
+            builder.Services.AddHttpContextAccessor();
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 

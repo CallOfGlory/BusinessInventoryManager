@@ -3114,24 +3114,31 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\46720\\.nuget\\packages\\": {}
+    "C:\\Users\\Oleksii#\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\46720\\RiderProjects\\BusinessInventoryManager\\WebApplication2.csproj",
+      "projectUniqueName": "C:\\Users\\Oleksii#\\Desktop\\NEA\\BusinessInventoryManager\\WebApplication2.csproj",
       "projectName": "WebApplication2",
-      "projectPath": "C:\\Users\\46720\\RiderProjects\\BusinessInventoryManager\\WebApplication2.csproj",
-      "packagesPath": "C:\\Users\\46720\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\46720\\RiderProjects\\BusinessInventoryManager\\obj\\",
+      "projectPath": "C:\\Users\\Oleksii#\\Desktop\\NEA\\BusinessInventoryManager\\WebApplication2.csproj",
+      "packagesPath": "C:\\Users\\Oleksii#\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Oleksii#\\Desktop\\NEA\\BusinessInventoryManager\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\46720\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Oleksii#\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net10.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -3200,7 +3207,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Users\\46720\\.dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

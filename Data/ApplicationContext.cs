@@ -12,5 +12,15 @@ namespace WebApplication2.Data
         }
 
         public DbSet<UserModel> Users { get; set; }
+        public DbSet<ProductModel> Products { get; set; }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserModel>()
+                .HasMany(u => u.Products)
+                .WithOne()
+                .HasForeignKey(p => p.UserId);
+        }
     }
 }

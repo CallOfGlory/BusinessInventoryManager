@@ -2,7 +2,6 @@
 using WebApplication2.Data;
 using WebApplication2.Interface;
 using WebApplication2.Models;
-using WebApplication2.Models.Enterance;
 using WebApplication2.Services.Interface;
 
 namespace WebApplication2.Repositories
@@ -16,37 +15,36 @@ namespace WebApplication2.Repositories
             _applicationContext = applicationContext;
         }
 
-        public async Task<UserModel> Login(LoginModel loginModel)
+        public async Task<UserModel> Add(UserModel userModel)
         {
-            UserModel userRecived = await _applicationContext.Users.FirstOrDefaultAsync(e => e.Email.ToString() == loginModel.Email);
-            if (userRecived == null || userRecived.Password != loginModel.Password)
-            {
-                throw new Exception("Invalid email or password");
-            }
-            _applicationContext.SaveChanges();
-
-            return userRecived;
+            await _applicationContext.Users.AddAsync(userModel);
+            await _applicationContext.SaveChangesAsync();
+            return userModel;
         }
 
-        public async Task<UserModel> Register(RegisterModel registerModel)
+        public async Task Delete(int id)
         {
-            UserModel userRecived = await _applicationContext.Users.FirstOrDefaultAsync(e => e.Email.ToString() == registerModel.Email);
-            if (userRecived != null)
-            {
-                throw new Exception("User with this email already exists");
-            }
-
-            UserModel user = new UserModel
-            {
-                Username = registerModel.Username,
-                Email = registerModel.Email,
-                Password = registerModel.Password
-            };
-
-            _applicationContext.Users.Add(user);
+            _applicationContext.Users.Remove(new UserModel { Id = id });
             await _applicationContext.SaveChangesAsync();
 
+        }
+
+        public async Task<UserModel> GetByEmail(string email)
+        {
+            var user = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user;
+        }
+
+        public async Task Update(UserModel userModel)
+        {
+            var existingUser = await _applicationContext.Users.FindAsync(userModel.Id);
+            if (existingUser != null)
+            {
+                existingUser.Username = userModel.Username;
+                existingUser.Email = userModel.Email;
+                existingUser.Password = userModel.Password;
+                await _applicationContext.SaveChangesAsync();
+            }
         }
     }
 }

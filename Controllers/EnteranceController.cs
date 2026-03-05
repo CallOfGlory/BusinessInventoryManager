@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WebApplication2.Interface;
 using WebApplication2.Models;
-using WebApplication2.Models.Enterance;
 using WebApplication2.Services.Interface;
 using WebApplication2.ViewModels.Enterance;
 
@@ -9,9 +7,10 @@ namespace WebApplication2.Controllers;
 
 public class EnteranceController : Controller
 {
-    private readonly IEntranceRepository _entranceService;
+    private readonly IEnteranceService _entranceService; // Змінено з IEntranceRepository на IEnteranceService
     private readonly IClaimsService _claimsService;
-    public EnteranceController(IEntranceRepository entranceService, IClaimsService claimsService)
+
+    public EnteranceController(IEnteranceService entranceService, IClaimsService claimsService) // Змінено тип параметра
     {
         _entranceService = entranceService;
         _claimsService = claimsService;
@@ -41,7 +40,8 @@ public class EnteranceController : Controller
             return View(model);
         }
 
-        LoginModel loginModel = new LoginModel
+        // Створюємо UserModel безпосередньо
+        UserModel user = new UserModel
         {
             Email = model.Email,
             Password = model.Password
@@ -49,7 +49,8 @@ public class EnteranceController : Controller
 
         try
         {
-            UserModel userRecived = await _entranceService.Login(loginModel);
+            // Використовуємо метод сервісу LoginAsync
+            UserModel userRecived = await _entranceService.LoginAsync(user);
             await _claimsService.AddClaimsAsync(userRecived.Id, userRecived.Email, HttpContext);
         }
         catch (Exception e)
@@ -67,24 +68,27 @@ public class EnteranceController : Controller
         Console.WriteLine(model.Username);
         Console.WriteLine(model.Email);
         Console.WriteLine(model.Password);
-        
+
         if (!ModelState.IsValid)
         {
             return View(model);
         }
 
-        RegisterModel registerModel = new RegisterModel
+        // Створюємо UserModel безпосередньо
+        UserModel user = new UserModel
         {
             Username = model.Username,
             Email = model.Email,
             Password = model.Password
         };
+
         try
         {
-            UserModel userRecived = await _entranceService.Register(registerModel);
+            // Використовуємо метод сервісу RegisterAsync
+            UserModel userRecived = await _entranceService.RegisterAsync(user);
             Console.WriteLine(userRecived.Id);
             Console.WriteLine(userRecived.Email);
-            
+
             await _claimsService.AddClaimsAsync(userRecived.Id, userRecived.Email, HttpContext);
         }
         catch (Exception e)

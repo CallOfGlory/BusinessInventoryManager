@@ -1,11 +1,12 @@
 ﻿using WebApplication2.Models;
-using WebApplication2.Models.Enterance;
 
 namespace WebApplication2.Interface
 {
     public interface IEntranceRepository
     {
-        Task<UserModel> Login(LoginModel loginModel);
-        Task<UserModel> Register(RegisterModel registerModel);
+        Task<UserModel> Add(UserModel userModel);
+        Task<UserModel> GetByEmail(string email);
+        Task Update(UserModel userModel);
+        Task Delete(int id);
     }
 }
