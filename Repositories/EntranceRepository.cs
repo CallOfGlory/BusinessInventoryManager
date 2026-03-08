@@ -1,50 +1,71 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Interface;
 using WebApplication2.Models;
-using WebApplication2.Services.Interface;
 
 namespace WebApplication2.Repositories
 {
     public class EntranceRepository : IEntranceRepository
     {
-        private readonly ApplicationContext _applicationContext;
+        private readonly ApplicationContext _context;
 
-        public EntranceRepository(ApplicationContext applicationContext, IClaimsService claimsService)
+        public EntranceRepository(ApplicationContext context)
         {
-            _applicationContext = applicationContext;
+            _context = context;
         }
 
         public async Task<UserModel> Add(UserModel userModel)
         {
-            await _applicationContext.Users.AddAsync(userModel);
-            await _applicationContext.SaveChangesAsync();
+            await _context.Users.AddAsync(userModel);
+            await _context.SaveChangesAsync();
             return userModel;
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            _applicationContext.Users.Remove(new UserModel { Id = id });
-            await _applicationContext.SaveChangesAsync();
+            var user = await _context.Users.FindAsync(id);
+            if (user == null) return false;
 
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public async Task<UserModel> GetByEmail(string email)
+        public async Task<UserModel?> GetByEmail(string email)
         {
-            var user = await _applicationContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-            return user;
+            return await _context.Users
+                .Include(u => u.Businesses)
+                .Include(u => u.Settings)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task Update(UserModel userModel)
+        public async Task<UserModel?> GetById(int id)
         {
-            var existingUser = await _applicationContext.Users.FindAsync(userModel.Id);
-            if (existingUser != null)
+            return await _context.Users
+                .Include(u => u.Businesses)
+                .Include(u => u.Settings)
+                .FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<UserModel> Update(UserModel userModel)
+        {
+            var existingUser = await _context.Users.FindAsync(userModel.Id);
+            if (existingUser == null)
             {
-                existingUser.Username = userModel.Username;
-                existingUser.Email = userModel.Email;
-                existingUser.Password = userModel.Password;
-                await _applicationContext.SaveChangesAsync();
+                throw new KeyNotFoundException("User not found");
             }
+
+            existingUser.Username = userModel.Username;
+            existingUser.Email = userModel.Email;
+            existingUser.PasswordHash = userModel.PasswordHash;
+            existingUser.FirstName = userModel.FirstName;
+            existingUser.LastName = userModel.LastName;
+            existingUser.Phone = userModel.Phone;
+            existingUser.UpdatedAt = DateTime.UtcNow;
+            existingUser.LastLoginAt = userModel.LastLoginAt;
+
+            await _context.SaveChangesAsync();
+            return existingUser;
         }
     }
 }

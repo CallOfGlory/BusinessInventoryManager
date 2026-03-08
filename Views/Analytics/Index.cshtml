@@ -1,0 +1,339 @@
+@model WebApplication2.ViewModels.Analytics.AnalyticsViewModel
+
+@{
+    ViewData["Title"] = "Analytics";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Analytics</h1>
+            <p class="text-muted mb-0">Performance insights for <strong>@Model.BusinessName</strong></p>
+        </div>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="startDate" class="form-control" 
+                           value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="endDate" class="form-control" 
+                           value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-filter me-2"></i>Apply Filter
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary ms-2">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 bg-gradient-primary text-white" 
+                 style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-cash-coin fs-1 opacity-75"></i>
+                    </div>
+                    <h6 class="text-white-50 mb-1">Total Revenue</h6>
+                    <h2 class="mb-0">@Model.CurrencySymbol@Model.TotalRevenue.ToString("N2")</h2>
+                    <small class="text-white-50">@Model.TotalUnitsSold units sold</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 bg-gradient-success text-white"
+                 style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-graph-up-arrow fs-1 opacity-75"></i>
+                    </div>
+                    <h6 class="text-white-50 mb-1">Gross Profit</h6>
+                    <h2 class="mb-0">@Model.CurrencySymbol@Model.GrossProfit.ToString("N2")</h2>
+                    <small class="text-white-50">@Model.ProfitMargin.ToString("N1")% margin</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 bg-gradient-info text-white"
+                 style="background: linear-gradient(135deg, #00c6fb 0%, #005bea 100%);">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-receipt fs-1 opacity-75"></i>
+                    </div>
+                    <h6 class="text-white-50 mb-1">Total Cost</h6>
+                    <h2 class="mb-0">@Model.CurrencySymbol@Model.TotalCost.ToString("N2")</h2>
+                    <small class="text-white-50">@Model.TotalTransactions transactions</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card border-0 shadow-sm h-100 bg-gradient-warning text-white"
+                 style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-archive fs-1 opacity-75"></i>
+                    </div>
+                    <h6 class="text-white-50 mb-1">Inventory Value</h6>
+                    <h2 class="mb-0">@Model.CurrencySymbol@Model.TotalInventoryValue.ToString("N2")</h2>
+                    <small class="text-white-50">@Model.TotalProducts products</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Sales Trend Chart -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart me-2"></i>Sales Trend
+                    </h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.SalesTrends.Any())
+                    {
+                        <canvas id="salesChart" height="300"></canvas>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-graph-up text-muted display-4"></i>
+                            <p class="text-muted mt-3">No sales data for the selected period</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Profit Breakdown -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent border-0">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pie-chart me-2"></i>Profit Breakdown
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Revenue</span>
+                            <span class="fw-bold text-success">@Model.CurrencySymbol@Model.TotalRevenue.ToString("N2")</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Cost</span>
+                            <span class="fw-bold text-danger">@Model.CurrencySymbol@Model.TotalCost.ToString("N2")</span>
+                        </div>
+                        @{
+                            var costPercentage = Model.TotalRevenue > 0 ? (Model.TotalCost / Model.TotalRevenue) * 100 : 0;
+                        }
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-danger" style="width: @costPercentage%"></div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="text-center py-3">
+                        <h6 class="text-muted mb-2">Net Profit</h6>
+                        <h2 class="@(Model.GrossProfit >= 0 ? "text-success" : "text-danger") mb-0">
+                            @Model.CurrencySymbol@Model.GrossProfit.ToString("N2")
+                        </h2>
+                        <span class="badge @(Model.ProfitMargin >= 0 ? "bg-success" : "bg-danger") mt-2">
+                            @Model.ProfitMargin.ToString("N1")% margin
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="bi bi-trophy me-2"></i>Top 5 Most Profitable Products
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.TopProducts.Any())
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-trophy text-muted display-4"></i>
+                            <p class="text-muted mt-3">No sales data for the selected period</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Units Sold</th>
+                                        <th>Revenue</th>
+                                        <th>Cost</th>
+                                        <th>Profit</th>
+                                        <th>Margin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        var rank = 1;
+                                    }
+                                    @foreach (var product in Model.TopProducts)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @if (rank == 1)
+                                                {
+                                                    <span class="badge bg-warning text-dark">
+                                                        <i class="bi bi-trophy-fill"></i> 1st
+                                                    </span>
+                                                }
+                                                else if (rank == 2)
+                                                {
+                                                    <span class="badge bg-secondary">2nd</span>
+                                                }
+                                                else if (rank == 3)
+                                                {
+                                                    <span class="badge bg-danger">3rd</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">@rank</span>
+                                                }
+                                            </td>
+                                            <td class="fw-medium">
+                                                <a asp-controller="Products" asp-action="Edit" asp-route-id="@product.ProductId"
+                                                   class="text-decoration-none">
+                                                    @product.ProductName
+                                                </a>
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(product.Category))
+                                                {
+                                                    <span class="badge bg-light text-dark">@product.Category</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td>@product.UnitsSold</td>
+                                            <td class="text-success">@Model.CurrencySymbol@product.Revenue.ToString("N2")</td>
+                                            <td class="text-danger">@Model.CurrencySymbol@product.Cost.ToString("N2")</td>
+                                            <td class="fw-bold @(product.Profit >= 0 ? "text-success" : "text-danger")">
+                                                @Model.CurrencySymbol@product.Profit.ToString("N2")
+                                            </td>
+                                            <td>
+                                                <span class="badge @(product.ProfitMargin >= 20 ? "bg-success" : product.ProfitMargin >= 10 ? "bg-warning" : "bg-danger")">
+                                                    @product.ProfitMargin.ToString("N1")%
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        rank++;
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        @if (Model.SalesTrends.Any())
+        {
+            var labels = Model.SalesTrends.Select(t => $"'{t.Date}'");
+            var salesData = Model.SalesTrends.Select(t => t.Sales.ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
+            var profitData = Model.SalesTrends.Select(t => t.Profit.ToString("F2", System.Globalization.CultureInfo.InvariantCulture));
+            
+            <text>
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [@Html.Raw(string.Join(",", labels))],
+                    datasets: [
+                        {
+                            label: 'Sales',
+                            data: [@Html.Raw(string.Join(",", salesData))],
+                            borderColor: 'rgb(75, 192, 192)',
+                            backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        },
+                        {
+                            label: 'Profit',
+                            data: [@Html.Raw(string.Join(",", profitData))],
+                            borderColor: 'rgb(54, 162, 235)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            fill: true,
+                            tension: 0.4
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '@Model.CurrencySymbol' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            </text>
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .card {
+            border-radius: 12px;
+        }
+        .table th {
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        #salesChart {
+            min-height: 300px;
+        }
+    </style>
+}

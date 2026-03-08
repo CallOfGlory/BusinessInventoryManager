@@ -1,0 +1,206 @@
+@model WebApplication2.ViewModels.Business.BusinessListViewModel
+
+@{
+    ViewData["Title"] = "My Businesses";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="display-6 mb-1">My Businesses</h1>
+            <p class="text-muted">Manage your business profiles and switch between them</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="bi bi-plus-circle me-2"></i>Add New Business
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-2"></i>@TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (!Model.Businesses.Any())
+    {
+        <div class="card border-0 shadow-sm">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-building display-1 text-muted mb-3"></i>
+                <h3>No Businesses Yet</h3>
+                <p class="text-muted mb-4">Create your first business to start managing inventory</p>
+                <a asp-action="Create" class="btn btn-primary btn-lg">
+                    <i class="bi bi-plus-circle me-2"></i>Create Your First Business
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var business in Model.Businesses)
+            {
+                <div class="col">
+                    <div class="card h-100 shadow-sm border-0 @(business.IsActive ? "border-primary border-2" : "")">
+                        @if (business.IsActive)
+                        {
+                            <div class="card-header bg-primary text-white border-0">
+                                <i class="bi bi-check-circle-fill me-2"></i>Active Business
+                            </div>
+                        }
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title fw-bold mb-0">@business.Name</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-link text-dark p-0" type="button" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li>
+                                            <a asp-action="Details" asp-route-id="@business.Id" class="dropdown-item">
+                                                <i class="bi bi-eye me-2"></i>View Details
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a asp-action="Edit" asp-route-id="@business.Id" class="dropdown-item">
+                                                <i class="bi bi-pencil me-2"></i>Edit
+                                            </a>
+                                        </li>
+                                        @if (!business.IsActive)
+                                        {
+                                            <li>
+                                                <form asp-action="SetActive" asp-route-id="@business.Id" method="post" class="d-inline">
+                                                    <button type="submit" class="dropdown-item">
+                                                        <i class="bi bi-check-circle me-2"></i>Set as Active
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        }
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>
+                                            <button class="dropdown-item text-danger" onclick="confirmDelete(@business.Id, '@business.Name')">
+                                                <i class="bi bi-trash me-2"></i>Delete
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(business.Description))
+                            {
+                                <p class="card-text text-muted small mb-3">@business.Description</p>
+                            }
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2 text-center">
+                                        <div class="fw-bold text-primary">@business.ProductCount</div>
+                                        <small class="text-muted">Products</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="bg-light rounded p-2 text-center">
+                                        <div class="fw-bold text-success">@business.TransactionCount</div>
+                                        <small class="text-muted">Transactions</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-secondary">
+                                    <i class="bi bi-currency-exchange me-1"></i>@business.Currency (@business.CurrencySymbol)
+                                </span>
+                                <small class="text-muted">
+                                    Created @business.CreatedAt.ToString("MMM dd, yyyy")
+                                </small>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent border-0">
+                            @if (!business.IsActive)
+                            {
+                                <form asp-action="SetActive" asp-route-id="@business.Id" method="post">
+                                    <button type="submit" class="btn btn-outline-primary w-100">
+                                        <i class="bi bi-arrow-right-circle me-2"></i>Switch to This Business
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <a asp-controller="Home" asp-action="Index" class="btn btn-primary w-100">
+                                    <i class="bi bi-speedometer2 me-2"></i>Go to Dashboard
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <i class="bi bi-exclamation-triangle text-danger me-2"></i>Confirm Delete
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="businessName"></strong>?</p>
+                <p class="text-danger small">
+                    <i class="bi bi-info-circle me-1"></i>
+                    This will permanently delete all products and transactions associated with this business.
+                </p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form asp-action="Delete" method="post" id="deleteForm">
+                    <input type="hidden" name="id" id="businessId" />
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete Business
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <script>
+        function confirmDelete(businessId, businessName) {
+            document.getElementById('businessId').value = businessId;
+            document.getElementById('businessName').textContent = businessName;
+            var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            deleteModal.show();
+        }
+    </script>
+}
+
+@section Styles {
+    <style>
+        .card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+        }
+        .border-primary.border-2 {
+            border-width: 2px !important;
+        }
+    </style>
+}

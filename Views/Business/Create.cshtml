@@ -1,0 +1,101 @@
+@model WebApplication2.ViewModels.Business.CreateBusinessViewModel
+
+@{
+    ViewData["Title"] = "Create Business";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white border-0">
+                    <h4 class="mb-0">
+                        <i class="bi bi-building-add me-2"></i>Create New Business
+                    </h4>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label fw-semibold">
+                                <i class="bi bi-tag me-1"></i>Business Name
+                            </label>
+                            <input asp-for="Name" class="form-control form-control-lg" placeholder="e.g., Coffee Shop, Clothing Store" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-semibold">
+                                <i class="bi bi-text-paragraph me-1"></i>Description (Optional)
+                            </label>
+                            <textarea asp-for="Description" class="form-control" rows="3" 
+                                      placeholder="Brief description of your business..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="Currency" class="form-label fw-semibold">
+                                    <i class="bi bi-currency-exchange me-1"></i>Currency
+                                </label>
+                                <select asp-for="Currency" class="form-select" id="currencySelect">
+                                    <option value="USD">US Dollar (USD)</option>
+                                    <option value="EUR">Euro (EUR)</option>
+                                    <option value="GBP">British Pound (GBP)</option>
+                                    <option value="UAH">Ukrainian Hryvnia (UAH)</option>
+                                    <option value="PLN">Polish Zloty (PLN)</option>
+                                    <option value="JPY">Japanese Yen (JPY)</option>
+                                    <option value="CAD">Canadian Dollar (CAD)</option>
+                                    <option value="AUD">Australian Dollar (AUD)</option>
+                                    <option value="CHF">Swiss Franc (CHF)</option>
+                                    <option value="CNY">Chinese Yuan (CNY)</option>
+                                </select>
+                                <span asp-validation-for="Currency" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="CurrencySymbol" class="form-label fw-semibold">
+                                    <i class="bi bi-hash me-1"></i>Currency Symbol
+                                </label>
+                                <input asp-for="CurrencySymbol" class="form-control" id="currencySymbol" />
+                                <span asp-validation-for="CurrencySymbol" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-grow-1">
+                                <i class="bi bi-check-circle me-2"></i>Create Business
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const currencySymbols = {
+            'USD': '$',
+            'EUR': '€',
+            'GBP': '£',
+            'UAH': '₴',
+            'PLN': 'zł',
+            'JPY': '¥',
+            'CAD': 'C$',
+            'AUD': 'A$',
+            'CHF': 'CHF',
+            'CNY': '¥'
+        };
+
+        document.getElementById('currencySelect').addEventListener('change', function() {
+            const symbol = currencySymbols[this.value] || '$';
+            document.getElementById('currencySymbol').value = symbol;
+        });
+    </script>
+}
