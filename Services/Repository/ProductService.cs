@@ -1,99 +1,79 @@
-﻿using WebApplication2.Interface;
+using WebApplication2.Interface;
 using WebApplication2.Models;
 using WebApplication2.Services.Interface;
 
-namespace WebApplication2.Repositories
+namespace WebApplication2.Services.Repository
 {
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
         private readonly ILogger<ProductService> _logger;
-        private readonly IClaimsService _claimsService;
-        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger, IClaimsService claimsService)
+
+        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger)
         {
             _productRepository = productRepository;
             _logger = logger;
-            _claimsService = claimsService;
-        }
-        public async Task<ProductModel> CreateProductAsync(ProductModel productModel)
-        {
-            productModel.CreatedAt = DateTime.UtcNow;
-            await _productRepository.AddProduct(productModel);
-            return productModel;
         }
 
-        public async Task DeleteProductAsync(int productId, int userId)
+        public async Task<ProductModel> CreateProductAsync(ProductModel product)
         {
-            try
-            {
-                ProductModel productModel = await _productRepository.GetProduct(productId);
-                if (productModel == null || productModel.UserId != userId)
-                {
-                    throw new Exception("Product not found or access denied.");
-                }
-                await _productRepository.RemoveProduct(productId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error deleting product: {ex.Message}");
-            }
+            return await _productRepository.Add(product);
         }
 
-        public async Task<ProductModel> GetProductByIdAsync(int productId, int userId)
+        public async Task<ProductModel> UpdateProductAsync(ProductModel product)
         {
-            try
+            var existing = await _productRepository.GetById(product.Id);
+            if (existing == null)
             {
-                ProductModel productModel = await _productRepository.GetProduct(productId);
-                if (productModel == null || productModel.UserId != userId)
-                {
-                    throw new Exception("Product not found or access denied.");
-                }
-                return productModel;
+                throw new KeyNotFoundException("Product not found");
             }
-            catch (Exception ex)
+
+            if (existing.UserId != product.UserId)
             {
-                throw new Exception($"Error retrieving product: {ex.Message}");
+                throw new UnauthorizedAccessException("Access denied");
             }
+
+            return await _productRepository.Update(product);
+        }
+
+        public async Task<bool> DeleteProductAsync(int productId, int userId)
+        {
+            var product = await _productRepository.GetById(productId);
+            if (product == null || product.UserId != userId)
+            {
+                return false;
+            }
+            return await _productRepository.Delete(productId);
         }
 
         public async Task<List<ProductModel>> GetUserProductsAsync(int userId)
         {
-            try
-            {
-                return await _productRepository.GetProducts(userId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving products: {ex.Message}");
-            }
+            return await _productRepository.GetByUserId(userId);
         }
 
-        public async Task UpdateProductAsync(ProductModel productModel)
+        public async Task<List<ProductModel>> GetBusinessProductsAsync(int businessId)
         {
-            var existingProduct = await _productRepository.GetProduct(productModel.Id);
+            return await _productRepository.GetByBusinessId(businessId);
+        }
 
-            if (existingProduct == null)
-                throw new KeyNotFoundException("Product not found");
+        public async Task<ProductModel?> GetProductByIdAsync(int productId, int userId)
+        {
+            var product = await _productRepository.GetById(productId);
+            if (product == null || product.UserId != userId)
+            {
+                return null;
+            }
+            return product;
+        }
 
-            if (existingProduct.UserId != productModel.UserId)
-                throw new UnauthorizedAccessException("Access denied");
+        public async Task<List<ProductModel>> GetLowStockProductsAsync(int businessId, int threshold = 10)
+        {
+            return await _productRepository.GetLowStockProducts(businessId, threshold);
+        }
 
-            // Валідація оновлених даних
-            if (!string.IsNullOrWhiteSpace(productModel.Name))
-                existingProduct.Name = productModel.Name;
-
-            if (productModel.Price > 0)
-                existingProduct.Price = productModel.Price;
-
-            if (!string.IsNullOrWhiteSpace(productModel.Description))
-                existingProduct.Description = productModel.Description;
-
-            if (!string.IsNullOrWhiteSpace(productModel.Category))
-                existingProduct.Category = productModel.Category;
-
-            await _productRepository.UpdateProduct(existingProduct);
-            _logger.LogInformation($"Product {productModel.Id} updated");
-
+        public async Task<List<ProductModel>> SearchProductsAsync(int businessId, string searchTerm)
+        {
+            return await _productRepository.SearchProducts(businessId, searchTerm);
         }
     }
 }
