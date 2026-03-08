@@ -1,4 +1,4 @@
-﻿@model IEnumerable<WebApplication2.Models.ProductModel>
+﻿@model IEnumerable<WebApplication2.ViewModels.Products.ProductViewModel>
 
 @{
     ViewData["Title"] = "My Products";
@@ -47,28 +47,79 @@
                     @foreach (var product in Model)
                     {
                         <div class="col">
-                            <div class="card h-100 shadow-sm">
+                            <div class="card h-100 shadow-sm product-card">
                                 <div class="card-header bg-transparent">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <span class="badge bg-secondary">@product.Category</span>
-                                        <div>
-                                            <a asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger"
-                                                    onclick="confirmDelete(@product.Id, '@product.Name')">
-                                                <i class="bi bi-trash"></i>
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-link text-dark" type="button" data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots-vertical"></i>
                                             </button>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li>
+                                                    <a asp-action="Edit" asp-route-id="@product.Id" class="dropdown-item">
+                                                        <i class="bi bi-pencil me-2"></i>Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item text-danger" onclick="confirmDelete(@product.Id, '@product.Name')">
+                                                        <i class="bi bi-trash me-2"></i>Delete
+                                                    </button>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <h5 class="card-title">@product.Name</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">@product.Price.ToString("C")</h6>
-                                    <p class="card-text">@product.Description</p>
+                                    <h5 class="card-title fw-bold">@product.Name</h5>
+
+                                    <!-- Інформація про ціни та прибуток -->
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="text-muted">Purchase Price:</small>
+                                            <span class="fw-bold">@product.Price.ToString("C")</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <small class="text-muted">Sale Price:</small>
+                                            <span class="fw-bold text-success">@product.SalePrice.ToString("C")</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small class="text-muted">Quantity:</small>
+                                            <span class="badge @(product.Quantity < 10 ? "bg-danger" : "bg-success")">
+                                                @product.Quantity units
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Розрахунок прибутку -->
+                                    @{
+                                        var profitPerUnit = product.SalePrice - product.Price;
+                                        var totalProfit = profitPerUnit * product.Quantity;
+                                    }
+                                    <div class="bg-light p-2 rounded mt-2">
+                                        <div class="d-flex justify-content-between">
+                                            <small>Profit/unit:</small>
+                                            <span class="@(profitPerUnit >= 0 ? "text-success" : "text-danger") fw-bold">
+                                                @profitPerUnit.ToString("C")
+                                            </span>
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <small>Total profit:</small>
+                                            <span class="@(totalProfit >= 0 ? "text-success" : "text-danger") fw-bold">
+                                                @totalProfit.ToString("C")
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <p class="card-text text-muted small mt-2">@product.Description</p>
                                 </div>
                                 <div class="card-footer bg-transparent text-muted">
-                                    <small>Added: @product.CreatedAt.ToString("MMM dd, yyyy")</small>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small>
+                                            <i class="bi bi-calendar3 me-1"></i>
+                                            Added: @(product.CreatedAt.ToString("MMM dd, yyyy"))
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -111,4 +162,37 @@
             deleteModal.show();
         }
     </script>
+}
+
+@section Styles {
+    <style>
+        .product-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+            .product-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            }
+
+        .card-header {
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .dropdown-item {
+            cursor: pointer;
+        }
+
+            .dropdown-item i {
+                width: 20px;
+            }
+
+        .badge {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.8rem;
+        }
+    </style>
 }

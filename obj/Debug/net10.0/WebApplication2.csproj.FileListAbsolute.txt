@@ -7,7 +7,6 @@ C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\WebAppl
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\WebApplication2.RazorAssemblyInfo.cache
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\WebApplication2.RazorAssemblyInfo.cs
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\WebApplication2.sourcelink.json
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\appsettings.Development.json
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\appsettings.json
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\WebApplication2.staticwebassets.runtime.json
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\WebApplication2.staticwebassets.endpoints.json
@@ -22,7 +21,6 @@ C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\rjsmcsh
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\scopedcss\bundle\WebApplication2.styles.css
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\scopedcss\projectbundle\WebApplication2.bundle.scp.css
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\dxqj2xv6zo-{0}-b9sayid5wm-b9sayid5wm.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\8ugws988hw-{0}-61n19gt1b8-61n19gt1b8.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\zt0mdot0v5-{0}-xtxxf3hu2r-xtxxf3hu2r.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\1jivc7nuui-{0}-t1cqhe9u97-t1cqhe9u97.gz
@@ -450,3 +448,4 @@ C:\Users\46720\RiderProjects\BusinessInventoryManager\obj\Debug\net10.0\WebAppli
 C:\Users\46720\RiderProjects\BusinessInventoryManager\obj\Debug\net10.0\ref\WebApplication2.dll
 C:\Users\46720\RiderProjects\BusinessInventoryManager\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.InMemory.dll
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\Microsoft.EntityFrameworkCore.InMemory.dll
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\dxqj2xv6zo-{0}-z05fk36ws2-z05fk36ws2.gz

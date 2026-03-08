@@ -12,7 +12,7 @@ using WebApplication2.Data;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20260304140617_Initial")]
+    [Migration("20260306184133_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -49,6 +49,12 @@ namespace WebApplication2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<double>("SalePrice")
                         .HasColumnType("float");
 
                     b.Property<int>("UserId")

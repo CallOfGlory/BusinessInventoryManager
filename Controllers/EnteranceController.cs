@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using WebApplication2.Models;
 using WebApplication2.Services.Interface;
 using WebApplication2.ViewModels.Enterance;
@@ -39,8 +40,6 @@ public class EnteranceController : Controller
         {
             return View(model);
         }
-
-        // Створюємо UserModel безпосередньо
         UserModel user = new UserModel
         {
             Email = model.Email,
@@ -49,7 +48,6 @@ public class EnteranceController : Controller
 
         try
         {
-            // Використовуємо метод сервісу LoginAsync
             UserModel userRecived = await _entranceService.LoginAsync(user);
             await _claimsService.AddClaimsAsync(userRecived.Id, userRecived.Email, HttpContext);
         }
@@ -73,18 +71,14 @@ public class EnteranceController : Controller
         {
             return View(model);
         }
-
-        // Створюємо UserModel безпосередньо
         UserModel user = new UserModel
         {
             Username = model.Username,
             Email = model.Email,
             Password = model.Password
         };
-
         try
         {
-            // Використовуємо метод сервісу RegisterAsync
             UserModel userRecived = await _entranceService.RegisterAsync(user);
             Console.WriteLine(userRecived.Id);
             Console.WriteLine(userRecived.Email);
@@ -99,6 +93,13 @@ public class EnteranceController : Controller
             return View(model);
         }
 
+        return RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Logout()
+    {
+        await HttpContext.SignOutAsync();
         return RedirectToAction("Index", "Home");
     }
 }

@@ -8,13 +8,16 @@ namespace WebApplication2.Repositories
     {
         private readonly IProductRepository _productRepository;
         private readonly ILogger<ProductService> _logger;
-        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger)
+        private readonly IClaimsService _claimsService;
+        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger, IClaimsService claimsService)
         {
             _productRepository = productRepository;
             _logger = logger;
+            _claimsService = claimsService;
         }
         public async Task<ProductModel> CreateProductAsync(ProductModel productModel)
         {
+            productModel.CreatedAt = DateTime.UtcNow;
             await _productRepository.AddProduct(productModel);
             return productModel;
         }
