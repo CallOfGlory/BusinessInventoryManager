@@ -1,99 +1,101 @@
-﻿using WebApplication2.Interface;
+using WebApplication2.Interface;
 using WebApplication2.Models;
 using WebApplication2.Services.Interface;
 
-namespace WebApplication2.Repositories
+namespace WebApplication2.Services.Repository
 {
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
         private readonly ILogger<ProductService> _logger;
-        private readonly IClaimsService _claimsService;
-        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger, IClaimsService claimsService)
+
+        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger)
         {
             _productRepository = productRepository;
             _logger = logger;
-            _claimsService = claimsService;
         }
-        public async Task<ProductModel> CreateProductAsync(ProductModel productModel)
+
+        public async Task<ProductModel> CreateProductAsync(ProductModel productModel, int businessId)
         {
+            productModel.BusinessId = businessId;
             productModel.CreatedAt = DateTime.UtcNow;
+            productModel.IsActive = true;
+
+            // Generate SKU if not provided
+            if (string.IsNullOrEmpty(productModel.SKU))
+            {
+                productModel.SKU = GenerateSKU(productModel.Name);
+            }
+
             await _productRepository.AddProduct(productModel);
+            _logger.LogInformation($"Product {productModel.Name} created for business {businessId}");
             return productModel;
         }
 
-        public async Task DeleteProductAsync(int productId, int userId)
+        public async Task DeleteProductAsync(int productId, int businessId)
         {
-            try
+            var product = await _productRepository.GetProduct(productId);
+            if (product == null || product.BusinessId != businessId)
             {
-                ProductModel productModel = await _productRepository.GetProduct(productId);
-                if (productModel == null || productModel.UserId != userId)
-                {
-                    throw new Exception("Product not found or access denied.");
-                }
-                await _productRepository.RemoveProduct(productId);
+                throw new UnauthorizedAccessException("Product not found or access denied.");
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error deleting product: {ex.Message}");
-            }
+            await _productRepository.RemoveProduct(productId);
+            _logger.LogInformation($"Product {productId} deleted from business {businessId}");
         }
 
-        public async Task<ProductModel> GetProductByIdAsync(int productId, int userId)
+        public async Task<ProductModel?> GetProductByIdAsync(int productId, int businessId)
         {
-            try
+            var product = await _productRepository.GetProduct(productId);
+            if (product == null || product.BusinessId != businessId)
             {
-                ProductModel productModel = await _productRepository.GetProduct(productId);
-                if (productModel == null || productModel.UserId != userId)
-                {
-                    throw new Exception("Product not found or access denied.");
-                }
-                return productModel;
+                return null;
             }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving product: {ex.Message}");
-            }
+            return product;
         }
 
-        public async Task<List<ProductModel>> GetUserProductsAsync(int userId)
+        public async Task<List<ProductModel>> GetBusinessProductsAsync(int businessId)
         {
-            try
-            {
-                return await _productRepository.GetProducts(userId);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception($"Error retrieving products: {ex.Message}");
-            }
+            return await _productRepository.GetProductsByBusinessId(businessId);
         }
 
-        public async Task UpdateProductAsync(ProductModel productModel)
+        public async Task<List<ProductModel>> GetLowStockProductsAsync(int businessId)
+        {
+            return await _productRepository.GetLowStockProducts(businessId);
+        }
+
+        public async Task UpdateProductAsync(ProductModel productModel, int businessId)
         {
             var existingProduct = await _productRepository.GetProduct(productModel.Id);
 
             if (existingProduct == null)
                 throw new KeyNotFoundException("Product not found");
 
-            if (existingProduct.UserId != productModel.UserId)
+            if (existingProduct.BusinessId != businessId)
                 throw new UnauthorizedAccessException("Access denied");
 
-            // Валідація оновлених даних
-            if (!string.IsNullOrWhiteSpace(productModel.Name))
-                existingProduct.Name = productModel.Name;
-
-            if (productModel.Price > 0)
-                existingProduct.Price = productModel.Price;
-
-            if (!string.IsNullOrWhiteSpace(productModel.Description))
-                existingProduct.Description = productModel.Description;
-
-            if (!string.IsNullOrWhiteSpace(productModel.Category))
-                existingProduct.Category = productModel.Category;
+            existingProduct.Name = productModel.Name;
+            existingProduct.SKU = productModel.SKU;
+            existingProduct.PurchasePrice = productModel.PurchasePrice;
+            existingProduct.SalePrice = productModel.SalePrice;
+            existingProduct.Quantity = productModel.Quantity;
+            existingProduct.MinStockLevel = productModel.MinStockLevel;
+            existingProduct.Description = productModel.Description;
+            existingProduct.Category = productModel.Category;
+            existingProduct.SupplierId = productModel.SupplierId;
+            existingProduct.UpdatedAt = DateTime.UtcNow;
 
             await _productRepository.UpdateProduct(existingProduct);
             _logger.LogInformation($"Product {productModel.Id} updated");
+        }
 
+        private string GenerateSKU(string productName)
+        {
+            var prefix = new string(productName.ToUpper()
+                .Where(char.IsLetter)
+                .Take(3)
+                .ToArray());
+            var timestamp = DateTime.UtcNow.ToString("yyMMddHHmm");
+            return $"{prefix}-{timestamp}";
         }
     }
 }

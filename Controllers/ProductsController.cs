@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication2.Models;
@@ -11,39 +11,86 @@ namespace WebApplication2.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IBusinessService _businessService;
         private readonly IClaimsService _claimsService;
 
-        public ProductsController(IProductService productService, IClaimsService claimsService)
+        public ProductsController(IProductService productService, IBusinessService businessService, IClaimsService claimsService)
         {
             _productService = productService;
+            _businessService = businessService;
             _claimsService = claimsService;
         }
 
         // GET: Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, string category, bool? lowStock)
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
-            var products = await _productService.GetUserProductsAsync(userId);
+            var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
 
-            // Конвертуємо Model у ViewModel для відображення
+            if (activeBusiness == null)
+            {
+                TempData["ErrorMessage"] = "Please create a business first.";
+                return RedirectToAction("Create", "Business");
+            }
+
+            var products = await _productService.GetBusinessProductsAsync(activeBusiness.Id);
+
+            // Apply filters
+            if (!string.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => 
+                    p.Name.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                    p.SKU.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(category))
+            {
+                products = products.Where(p => p.Category == category).ToList();
+            }
+
+            if (lowStock == true)
+            {
+                products = products.Where(p => p.Quantity <= p.MinStockLevel).ToList();
+            }
+
             var productViewModels = products.Select(p => new ProductViewModel
             {
                 Id = p.Id,
                 Name = p.Name,
-                Price = (double)p.Price,
-                SalePrice = (double)p.SalePrice,
+                SKU = p.SKU,
+                PurchasePrice = p.PurchasePrice,
+                SalePrice = p.SalePrice,
                 Quantity = p.Quantity,
+                MinStockLevel = p.MinStockLevel,
                 Description = p.Description,
                 Category = p.Category,
+                IsActive = p.IsActive,
                 CreatedAt = p.CreatedAt,
+                UpdatedAt = p.UpdatedAt,
+                SupplierName = p.Supplier?.Name ?? ""
             }).ToList();
+
+            ViewBag.Categories = products.Select(p => p.Category).Distinct().Where(c => !string.IsNullOrEmpty(c)).ToList();
+            ViewBag.BusinessName = activeBusiness.Name;
+            ViewBag.Search = search;
+            ViewBag.Category = category;
+            ViewBag.LowStock = lowStock;
 
             return View(productViewModels);
         }
 
         // GET: Products/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+            var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
+
+            if (activeBusiness == null)
+            {
+                TempData["ErrorMessage"] = "Please create a business first.";
+                return RedirectToAction("Create", "Business");
+            }
+
             return View(new ProductViewModel());
         }
 
@@ -59,20 +106,30 @@ namespace WebApplication2.Controllers
 
             try
             {
-                // Конвертуємо ViewModel у Model для збереження в БД
+                int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
+
+                if (activeBusiness == null)
+                {
+                    TempData["ErrorMessage"] = "Please create a business first.";
+                    return RedirectToAction("Create", "Business");
+                }
+
                 var product = new ProductModel
                 {
                     Name = model.Name,
-                    Price = model.Price,
+                    SKU = model.SKU,
+                    PurchasePrice = model.PurchasePrice,
                     SalePrice = model.SalePrice,
                     Quantity = model.Quantity,
+                    MinStockLevel = model.MinStockLevel,
                     Description = model.Description,
                     Category = model.Category,
-                    UserId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier),
-                    CreatedAt = DateTime.Now
+                    SupplierId = model.SupplierId,
+                    UserId = userId
                 };
 
-                await _productService.CreateProductAsync(product);
+                await _productService.CreateProductAsync(product, activeBusiness.Id);
                 TempData["SuccessMessage"] = "Product created successfully!";
 
                 return RedirectToAction(nameof(Index));
@@ -90,24 +147,35 @@ namespace WebApplication2.Controllers
             try
             {
                 int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
-                var product = await _productService.GetProductByIdAsync(id, userId);
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
+
+                if (activeBusiness == null)
+                {
+                    return NotFound();
+                }
+
+                var product = await _productService.GetProductByIdAsync(id, activeBusiness.Id);
 
                 if (product == null)
                 {
                     return NotFound();
                 }
 
-                // Конвертуємо Model у ViewModel для редагування
                 var viewModel = new ProductViewModel
                 {
                     Id = product.Id,
                     Name = product.Name,
-                    Price = (double)product.Price,
-                    SalePrice = (double)product.SalePrice,
+                    SKU = product.SKU,
+                    PurchasePrice = product.PurchasePrice,
+                    SalePrice = product.SalePrice,
                     Quantity = product.Quantity,
+                    MinStockLevel = product.MinStockLevel,
                     Description = product.Description,
                     Category = product.Category,
+                    SupplierId = product.SupplierId,
+                    IsActive = product.IsActive,
                     CreatedAt = product.CreatedAt,
+                    UpdatedAt = product.UpdatedAt
                 };
 
                 return View(viewModel);
@@ -137,22 +205,28 @@ namespace WebApplication2.Controllers
             try
             {
                 int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
 
-                // Конвертуємо ViewModel у Model для оновлення
+                if (activeBusiness == null)
+                {
+                    return NotFound();
+                }
+
                 var product = new ProductModel
                 {
                     Id = id,
                     Name = model.Name,
-                    Price = (double)model.Price,
-                    SalePrice = (double)model.SalePrice,
+                    SKU = model.SKU,
+                    PurchasePrice = model.PurchasePrice,
+                    SalePrice = model.SalePrice,
                     Quantity = model.Quantity,
+                    MinStockLevel = model.MinStockLevel,
                     Description = model.Description,
                     Category = model.Category,
-                    UserId = userId,
-                    CreatedAt = model.CreatedAt, // Зберігаємо оригінальну дату створення
+                    SupplierId = model.SupplierId
                 };
 
-                await _productService.UpdateProductAsync(product);
+                await _productService.UpdateProductAsync(product, activeBusiness.Id);
                 TempData["SuccessMessage"] = "Product updated successfully!";
 
                 return RedirectToAction(nameof(Index));
@@ -172,8 +246,15 @@ namespace WebApplication2.Controllers
             try
             {
                 int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
-                await _productService.DeleteProductAsync(id, userId);
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
 
+                if (activeBusiness == null)
+                {
+                    TempData["ErrorMessage"] = "No active business found.";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                await _productService.DeleteProductAsync(id, activeBusiness.Id);
                 TempData["SuccessMessage"] = "Product deleted successfully!";
             }
             catch (Exception ex)
@@ -182,6 +263,52 @@ namespace WebApplication2.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Products/Details/5
+        public async Task<IActionResult> Details(int id)
+        {
+            try
+            {
+                int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
+
+                if (activeBusiness == null)
+                {
+                    return NotFound();
+                }
+
+                var product = await _productService.GetProductByIdAsync(id, activeBusiness.Id);
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                var viewModel = new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    SKU = product.SKU,
+                    PurchasePrice = product.PurchasePrice,
+                    SalePrice = product.SalePrice,
+                    Quantity = product.Quantity,
+                    MinStockLevel = product.MinStockLevel,
+                    Description = product.Description,
+                    Category = product.Category,
+                    IsActive = product.IsActive,
+                    CreatedAt = product.CreatedAt,
+                    UpdatedAt = product.UpdatedAt,
+                    SupplierName = product.Supplier?.Name ?? "Not assigned"
+                };
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error loading product: {ex.Message}";
+                return RedirectToAction(nameof(Index));
+            }
         }
     }
 }

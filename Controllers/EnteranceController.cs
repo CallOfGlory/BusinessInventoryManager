@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication2.Models;
 using WebApplication2.Services.Interface;
@@ -40,60 +40,53 @@ public class EnteranceController : Controller
         {
             return View(model);
         }
+        
         UserModel user = new UserModel
         {
             Email = model.Email,
-            Password = model.Password
+            PasswordHash = model.Password // Password will be verified against hash in service
         };
 
         try
         {
-            UserModel userRecived = await _entranceService.LoginAsync(user);
-            await _claimsService.AddClaimsAsync(userRecived.Id, userRecived.Email, HttpContext);
+            UserModel userReceived = await _entranceService.LoginAsync(user);
+            await _claimsService.AddClaimsAsync(userReceived.Id, userReceived.Email, HttpContext);
+            return RedirectToAction("Index", "Home");
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.Message);
+            ModelState.AddModelError("", "Invalid email or password");
             return View(model);
         }
-
-        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
-        Console.WriteLine(model.Username);
-        Console.WriteLine(model.Email);
-        Console.WriteLine(model.Password);
-
         if (!ModelState.IsValid)
         {
             return View(model);
         }
+        
         UserModel user = new UserModel
         {
             Username = model.Username,
             Email = model.Email,
-            Password = model.Password
+            PasswordHash = model.Password // Will be hashed in the service
         };
+        
         try
         {
-            UserModel userRecived = await _entranceService.RegisterAsync(user);
-            Console.WriteLine(userRecived.Id);
-            Console.WriteLine(userRecived.Email);
-
-            await _claimsService.AddClaimsAsync(userRecived.Id, userRecived.Email, HttpContext);
+            UserModel userReceived = await _entranceService.RegisterAsync(user);
+            await _claimsService.AddClaimsAsync(userReceived.Id, userReceived.Email, HttpContext);
+            TempData["SuccessMessage"] = "Registration successful! Welcome to Business Inventory Manager.";
+            return RedirectToAction("Index", "Home");
         }
         catch (Exception e)
         {
-            Console.WriteLine("---- ERROR ----");
-            Console.WriteLine(e.Message);
-            Console.WriteLine(e);
+            ModelState.AddModelError("", e.Message);
             return View(model);
         }
-
-        return RedirectToAction("Index", "Home");
     }
 
     [HttpPost]

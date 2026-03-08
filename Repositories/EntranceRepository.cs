@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Interface;
 using WebApplication2.Models;
@@ -42,7 +42,11 @@ namespace WebApplication2.Repositories
             {
                 existingUser.Username = userModel.Username;
                 existingUser.Email = userModel.Email;
-                existingUser.Password = userModel.Password;
+                existingUser.PasswordHash = userModel.PasswordHash;
+                existingUser.FirstName = userModel.FirstName;
+                existingUser.LastName = userModel.LastName;
+                existingUser.Phone = userModel.Phone;
+                existingUser.LastLoginAt = userModel.LastLoginAt;
                 await _applicationContext.SaveChangesAsync();
             }
         }

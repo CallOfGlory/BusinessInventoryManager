@@ -44,9 +44,15 @@ namespace WebApplication2
             // Репозиторії (CRUD)
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IEntranceRepository, EntranceRepository>();
+            builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
+            builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
             // Сервіси (бізнес-логіка)
             builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IBusinessService, BusinessService>();
+            builder.Services.AddScoped<ITransactionService, TransactionService>();
+            builder.Services.AddScoped<IAnalyticsService, AnalyticsService>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
             builder.Services.AddScoped<IEnteranceService, EnteranceService>();
             builder.Services.AddScoped<IClaimsService, ClaimsService>();
             builder.Services.AddScoped<IValidationService, ValidationService>();
