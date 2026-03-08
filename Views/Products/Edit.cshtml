@@ -1,119 +1,110 @@
-﻿@model WebApplication2.ViewModels.Products.ProductViewModel
+@model WebApplication2.ViewModels.Products.ProductViewModel
 
 @{
     ViewData["Title"] = "Edit Product";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-warning text-dark">
-                    <h3 class="mb-0">
-                        <i class="bi bi-pencil-square"></i> Edit Product
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <form asp-action="Edit" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-pencil me-2"></i>Edit Product</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Edit" method="post">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreatedAt" />
 
-                        <!-- Приховані поля -->
-                        <input type="hidden" asp-for="Id" />
-                        <input type="hidden" asp-for="CreatedAt" />
-
-                        <!-- Product Name -->
-                        <div class="mb-3">
-                            <label asp-for="Name" class="form-label fw-bold">Product Name</label>
-                            <input asp-for="Name" class="form-control" placeholder="Enter product name" />
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label asp-for="Name" class="form-label">Product Name *</label>
+                            <input asp-for="Name" class="form-control" />
                             <span asp-validation-for="Name" class="text-danger small"></span>
                         </div>
-
-                        <!-- Price and Sale Price -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Price" class="form-label fw-bold">Purchase Price</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input asp-for="Price" class="form-control" type="number" step="0.01" />
-                                </div>
-                                <span asp-validation-for="Price" class="text-danger small"></span>
-                                <small class="text-muted">Your cost price</small>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="SalePrice" class="form-label fw-bold">Sale Price</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input asp-for="SalePrice" class="form-control" type="number" step="0.01" />
-                                </div>
-                                <span asp-validation-for="SalePrice" class="text-danger small"></span>
-                                <small class="text-muted">Customer price</small>
-                            </div>
+                        <div class="col-md-4">
+                            <label asp-for="SKU" class="form-label">SKU</label>
+                            <input asp-for="SKU" class="form-control" />
+                            <span asp-validation-for="SKU" class="text-danger small"></span>
                         </div>
 
-                        <!-- Quantity and Category -->
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Quantity" class="form-label fw-bold">Quantity</label>
-                                <input asp-for="Quantity" class="form-control" type="number" min="1" />
-                                <span asp-validation-for="Quantity" class="text-danger small"></span>
-                                <small class="text-muted">Number of units in stock</small>
+                        <div class="col-md-4">
+                            <label asp-for="PurchasePrice" class="form-label">Purchase Price *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="PurchasePrice" class="form-control" type="number" step="0.01" />
                             </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Category" class="form-label fw-bold">Category</label>
-                                <select asp-for="Category" class="form-select">
-                                    <option value="">Select category</option>
-                                    <option value="Electronics">📱 Electronics</option>
-                                    <option value="Clothing">👕 Clothing</option>
-                                    <option value="Books">📚 Books</option>
-                                    <option value="Home & Garden">🏠 Home & Garden</option>
-                                    <option value="Sports">⚽ Sports</option>
-                                    <option value="Toys">🧸 Toys</option>
-                                    <option value="Food">🍎 Food</option>
-                                    <option value="Other">📦 Other</option>
-                                </select>
-                                <span asp-validation-for="Category" class="text-danger small"></span>
+                            <span asp-validation-for="PurchasePrice" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="SalePrice" class="form-label">Sale Price *</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input asp-for="SalePrice" class="form-control" type="number" step="0.01" />
                             </div>
+                            <span asp-validation-for="SalePrice" class="text-danger small"></span>
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Quantity" class="form-label">Quantity *</label>
+                            <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                            <span asp-validation-for="Quantity" class="text-danger small"></span>
                         </div>
 
-                        <!-- Description -->
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label fw-bold">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter product description"></textarea>
+                        <div class="col-md-4">
+                            <label asp-for="MinStockLevel" class="form-label">Min Stock Level</label>
+                            <input asp-for="MinStockLevel" class="form-control" type="number" min="0" />
+                        </div>
+                        <div class="col-md-4">
+                            <label asp-for="Category" class="form-label">Category *</label>
+                            <select asp-for="Category" class="form-select">
+                                <option value="">Select category</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Food">Food</option>
+                                <option value="Home">Home</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Books">Books</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <span asp-validation-for="Category" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="Description" class="form-label">Description *</label>
+                            <textarea asp-for="Description" class="form-control" rows="3"></textarea>
                             <span asp-validation-for="Description" class="text-danger small"></span>
-                            <small class="text-muted">
-                                <span id="charCount">@(Model.Description?.Length ?? 0)</span>/2000 characters
-                            </small>
                         </div>
 
                         <!-- Profit Preview -->
-                        <div class="alert alert-info bg-light mb-4" id="profitPreview">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fw-bold">Profit per unit:</span>
-                                <span class="text-success fw-bold" id="profitAmount">
-                                    $@((Model.SalePrice - Model.Price).ToString("F2"))
-                                </span>
-                            </div>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <span class="fw-bold">Total profit (based on quantity):</span>
-                                <span class="text-success fw-bold" id="totalProfit">
-                                    $@(((Model.SalePrice - Model.Price) * Model.Quantity).ToString("F2"))
-                                </span>
+                        <div class="col-12">
+                            <div class="alert alert-light border">
+                                <div class="row text-center">
+                                    <div class="col-md-4">
+                                        <small class="text-muted">Profit per Unit</small>
+                                        <h5 class="mb-0 text-success" id="profitAmount">@Model.ProfitPerUnit.ToString("C")</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="text-muted">Profit Margin</small>
+                                        <h5 class="mb-0 text-info" id="profitMargin">@Model.ProfitMargin.ToString("F1")%</h5>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <small class="text-muted">Total Potential Profit</small>
+                                        <h5 class="mb-0 text-primary" id="totalProfit">@Model.TotalProfit.ToString("C")</h5>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Action Buttons -->
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> Back to List
-                            </a>
-                            <button type="submit" class="btn btn-warning">
-                                <i class="bi bi-pencil"></i> Update Product
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left me-1"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i> Save Changes
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -121,133 +112,32 @@
 
 @section Script {
     <partial name="_ValidationScriptsPartial" />
-
     <script>
-        $(document).ready(function() {
-            // Character counter for description
-            $('#Description').on('input', function() {
-                var length = $(this).val().length;
-                $('#charCount').text(length);
-
-                if (length < 10) {
-                    $('#charCount').css('color', 'red');
-                } else if (length > 2000) {
-                    $('#charCount').css('color', 'red');
-                } else {
-                    $('#charCount').css('color', 'green');
-                }
-            });
-
-            // Profit calculator
+        document.addEventListener('DOMContentLoaded', function() {
+            const purchasePrice = document.getElementById('PurchasePrice');
+            const salePrice = document.getElementById('SalePrice');
+            const quantity = document.getElementById('Quantity');
+            
             function calculateProfit() {
-                var price = parseFloat($('#Price').val()) || 0;
-                var salePrice = parseFloat($('#SalePrice').val()) || 0;
-                var quantity = parseInt($('#Quantity').val()) || 0;
-
-                if (price > 0 && salePrice > 0 && quantity > 0) {
-                    var profitPerUnit = salePrice - price;
-                    var totalProfit = profitPerUnit * quantity;
-
-                    if (profitPerUnit > 0) {
-                        $('#profitAmount').text('$' + profitPerUnit.toFixed(2)).removeClass('text-danger').addClass('text-success');
-                        $('#totalProfit').text('$' + totalProfit.toFixed(2)).removeClass('text-danger').addClass('text-success');
-                    } else {
-                        $('#profitAmount').text('$' + profitPerUnit.toFixed(2)).removeClass('text-success').addClass('text-danger');
-                        $('#totalProfit').text('$' + totalProfit.toFixed(2)).removeClass('text-success').addClass('text-danger');
-                    }
-
-                    $('#profitPreview').show();
-                } else {
-                    $('#profitPreview').hide();
-                }
+                const purchase = parseFloat(purchasePrice.value) || 0;
+                const sale = parseFloat(salePrice.value) || 0;
+                const qty = parseInt(quantity.value) || 0;
+                
+                const profitPerUnit = sale - purchase;
+                const margin = sale > 0 ? (profitPerUnit / sale) * 100 : 0;
+                const total = profitPerUnit * qty;
+                
+                document.getElementById('profitAmount').textContent = '$' + profitPerUnit.toFixed(2);
+                document.getElementById('profitMargin').textContent = margin.toFixed(1) + '%';
+                document.getElementById('totalProfit').textContent = '$' + total.toFixed(2);
+                
+                const profitEl = document.getElementById('profitAmount');
+                profitEl.className = 'mb-0 ' + (profitPerUnit >= 0 ? 'text-success' : 'text-danger');
             }
-
-            $('#Price, #SalePrice, #Quantity').on('input', calculateProfit);
-
-            // Ensure minimum values
-            $('#Price, #SalePrice').on('change', function() {
-                var val = parseFloat($(this).val());
-                if (val < 0.01) {
-                    $(this).val(0.01);
-                    calculateProfit();
-                }
-            });
-
-            $('#Quantity').on('change', function() {
-                var val = parseInt($(this).val());
-                if (val < 1) {
-                    $(this).val(1);
-                    calculateProfit();
-                }
-            });
+            
+            purchasePrice.addEventListener('input', calculateProfit);
+            salePrice.addEventListener('input', calculateProfit);
+            quantity.addEventListener('input', calculateProfit);
         });
     </script>
 }
-
-<style>
-    .form-label {
-        margin-bottom: 0.3rem;
-    }
-
-    .input-group-text {
-        background-color: #f8f9fa;
-    }
-
-    .card {
-        border: none;
-        border-radius: 15px;
-    }
-
-    .card-header {
-        border-radius: 15px 15px 0 0 !important;
-        padding: 1.2rem;
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    }
-
-    .btn {
-        padding: 0.6rem 1.5rem;
-        border-radius: 8px;
-        font-weight: 500;
-    }
-
-    .btn-warning {
-        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        border: none;
-        color: white;
-    }
-
-        .btn-warning:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(240, 147, 251, 0.4);
-            color: white;
-        }
-
-    .btn-secondary {
-        background: #6c757d;
-        border: none;
-    }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-
-    .alert-info {
-        border-left: 4px solid #17a2b8;
-        border-radius: 8px;
-    }
-
-    .text-danger small {
-        font-size: 0.85rem;
-    }
-
-    .form-control:focus, .form-select:focus {
-        border-color: #f5576c;
-        box-shadow: 0 0 0 0.2rem rgba(245, 87, 108, 0.25);
-    }
-
-    #charCount {
-        font-weight: bold;
-        transition: color 0.3s;
-    }
-</style>

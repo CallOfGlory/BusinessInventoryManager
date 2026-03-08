@@ -1,0 +1,300 @@
+@model WebApplication2.ViewModels.Analytics.AnalyticsViewModel
+
+@{
+    ViewData["Title"] = "Analytics";
+}
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <div>
+            <h2 class="mb-1">Analytics</h2>
+            <p class="text-muted mb-0">Business performance insights</p>
+        </div>
+        <form method="get" class="d-flex gap-2 align-items-center">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                <span class="input-group-text">to</span>
+                <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+            </div>
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-funnel"></i> Apply
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Summary Stats -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1 opacity-75">Total Revenue</p>
+                        <h3 class="mb-0">@Model.TotalRevenue.ToString("C")</h3>
+                    </div>
+                    <i class="bi bi-cash-stack fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1 opacity-75">Total Profit</p>
+                        <h3 class="mb-0">@Model.TotalProfit.ToString("C")</h3>
+                    </div>
+                    <i class="bi bi-graph-up fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1 opacity-75">Total Sales</p>
+                        <h3 class="mb-0">@Model.TotalSalesCount</h3>
+                    </div>
+                    <i class="bi bi-cart-check fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <p class="mb-1 opacity-75">Profit Margin</p>
+                        <h3 class="mb-0">@Model.ProfitMargin.ToString("F1")%</h3>
+                    </div>
+                    <i class="bi bi-percent fs-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Total Purchases</p>
+                <h4 class="text-primary mb-0">@Model.TotalPurchases.ToString("C")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Purchase Count</p>
+                <h4 class="mb-0">@Model.TotalPurchasesCount</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Avg. Transaction</p>
+                <h4 class="mb-0">@Model.AverageTransactionValue.ToString("C")</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body text-center">
+                <p class="text-muted mb-1">Items Sold</p>
+                <h4 class="mb-0">@Model.TotalItemsSold</h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <!-- Daily Sales Chart Data -->
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-bar-chart me-2"></i>Daily Revenue
+            </div>
+            <div class="card-body">
+                @if (Model.DailySales.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Revenue</th>
+                                    <th>Profit</th>
+                                    <th>Transactions</th>
+                                    <th>Visual</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{
+                                    var maxRevenue = Model.DailySales.Any() ? Model.DailySales.Max(d => d.Revenue) : 1;
+                                }
+                                @foreach (var day in Model.DailySales.OrderByDescending(d => d.Date).Take(14))
+                                {
+                                    var percentage = maxRevenue > 0 ? (day.Revenue / maxRevenue) * 100 : 0;
+                                    <tr>
+                                        <td>@day.Date.ToString("MMM dd")</td>
+                                        <td>@day.Revenue.ToString("C")</td>
+                                        <td class="@(day.Profit >= 0 ? "text-success" : "text-danger")">@day.Profit.ToString("C")</td>
+                                        <td>@day.TransactionCount</td>
+                                        <td style="width: 200px;">
+                                            <div class="progress" style="height: 20px;">
+                                                <div class="progress-bar bg-primary" style="width: @percentage%"></div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <i class="bi bi-graph-up text-muted" style="font-size: 3rem;"></i>
+                        <p class="text-muted mt-2">No sales data for selected period</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-trophy me-2"></i>Top Products by Revenue
+            </div>
+            <div class="card-body p-0">
+                @if (Model.TopProducts.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var product in Model.TopProducts.Take(10))
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <div class="fw-medium">@product.ProductName</div>
+                                    <small class="text-muted">@product.QuantitySold units sold</small>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold text-success">@product.Revenue.ToString("C")</div>
+                                    <small class="text-muted">@product.Profit.ToString("C") profit</small>
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No product data</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Category Analysis -->
+<div class="row g-3 mt-3">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-pie-chart me-2"></i>Sales by Category
+            </div>
+            <div class="card-body">
+                @if (Model.CategorySales.Any())
+                {
+                    @foreach (var category in Model.CategorySales)
+                    {
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>@(string.IsNullOrEmpty(category.Category) ? "Uncategorized" : category.Category)</span>
+                                <span class="fw-medium">@category.TotalSales.ToString("C")</span>
+                            </div>
+                            <div class="progress" style="height: 10px;">
+                                <div class="progress-bar" style="width: @category.Percentage%; background-color: hsl(@(category.Category?.GetHashCode() % 360), 60%, 50%);"></div>
+                            </div>
+                            <small class="text-muted">@category.Percentage.ToString("F1")% of total - @category.ItemCount items</small>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No category data</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-clock-history me-2"></i>Monthly Comparison
+            </div>
+            <div class="card-body">
+                @if (Model.MonthlySales.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Revenue</th>
+                                    <th>Profit</th>
+                                    <th>Transactions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var month in Model.MonthlySales.OrderByDescending(m => m.Month))
+                                {
+                                    <tr>
+                                        <td>@month.Month.ToString("MMM yyyy")</td>
+                                        <td>@month.Revenue.ToString("C")</td>
+                                        <td class="@(month.Profit >= 0 ? "text-success" : "text-danger")">@month.Profit.ToString("C")</td>
+                                        <td>@month.TransactionCount</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-4">
+                        <p class="text-muted mb-0">No monthly data</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Export Options -->
+<div class="card mt-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h6 class="mb-1">Export Report</h6>
+                <p class="text-muted small mb-0">Download analytics data for external analysis</p>
+            </div>
+            <div class="d-flex gap-2">
+                <a asp-action="ExportCsv" asp-route-startDate="@Model.StartDate.ToString("yyyy-MM-dd")" asp-route-endDate="@Model.EndDate.ToString("yyyy-MM-dd")" class="btn btn-outline-primary">
+                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Export CSV
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
