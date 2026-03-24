@@ -6,7 +6,7 @@ using WebApplication2.ViewModels.Analytics;
 
 namespace WebApplication2.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class AnalyticsController : Controller
     {
         private readonly IAnalyticsService _analyticsService;
@@ -37,7 +37,6 @@ namespace WebApplication2.Controllers
                 return RedirectToAction("Index", "Business");
             }
 
-            // Default to current month if no dates specified
             var now = DateTime.UtcNow;
             var start = startDate ?? new DateTime(now.Year, now.Month, 1);
             var end = endDate ?? start.AddMonths(1).AddDays(-1);
@@ -85,7 +84,6 @@ namespace WebApplication2.Controllers
             return View(viewModel);
         }
 
-        // API endpoint for chart data
         [HttpGet]
         public async Task<IActionResult> GetSalesTrends(DateTime startDate, DateTime endDate)
         {

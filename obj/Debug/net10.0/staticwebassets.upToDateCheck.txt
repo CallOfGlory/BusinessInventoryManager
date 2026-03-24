@@ -1,6 +1,6 @@
-wwwroot\css\site.css
-wwwroot\favicon.ico
 wwwroot\js\site.js
+wwwroot\favicon.ico
+wwwroot\css\site.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
@@ -61,9 +61,8 @@ wwwroot\lib\jquery\dist\jquery.slim.js
 wwwroot\lib\jquery\dist\jquery.slim.min.js
 wwwroot\lib\jquery\dist\jquery.slim.min.map
 wwwroot\lib\jquery\LICENSE.txt
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\css\site.css
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\jquery\LICENSE.txt
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\favicon.ico
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\js\site.js
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
@@ -122,4 +121,5 @@ C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\jquery\dist\j
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\jquery\dist\jquery.slim.js
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\jquery\dist\jquery.slim.min.js
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\jquery\dist\jquery.slim.min.map
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\lib\jquery\LICENSE.txt
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\js\site.js
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\wwwroot\css\site.css

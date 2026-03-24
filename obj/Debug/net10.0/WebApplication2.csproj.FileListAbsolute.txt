@@ -46,8 +46,6 @@ C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compres
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\10wuua6r8y-{0}-0j3bgjxly4-0j3bgjxly4.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\icfzro72s6-{0}-ttgo8qnofa-ttgo8qnofa.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\6uwi4ohvjp-{0}-87fc7y1x7t-87fc7y1x7t.gz
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\eo785enrre-{0}-yewmli5klq-yewmli5klq.gz
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\wpz0wag3v8-{0}-yewmli5klq-yewmli5klq.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\staticwebassets.build.json.cache
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\staticwebassets.development.json
@@ -637,8 +635,6 @@ C:\Users\Oleksii#\Desktop\NEA_TEST\obj\Debug\net10.0\refint\WebApplication2.dll
 C:\Users\Oleksii#\Desktop\NEA_TEST\obj\Debug\net10.0\WebApplication2.pdb
 C:\Users\Oleksii#\Desktop\NEA_TEST\obj\Debug\net10.0\WebApplication2.genruntimeconfig.cache
 C:\Users\Oleksii#\Desktop\NEA_TEST\obj\Debug\net10.0\ref\WebApplication2.dll
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\dxqj2xv6zo-{0}-9pnyhe4odm-9pnyhe4odm.gz
-C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\zt0mdot0v5-{0}-fr7q2aak1r-fr7q2aak1r.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\1jivc7nuui-{0}-bqjiyaj88i-bqjiyaj88i.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\udwryv0sym-{0}-erw9l3u2r3-erw9l3u2r3.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\alj304vda5-{0}-d7shbmvgxk-d7shbmvgxk.gz
@@ -674,3 +670,8 @@ C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compres
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\ma03gd9x5b-{0}-2z0ns9nrw6-2z0ns9nrw6.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\vioj6o635e-{0}-muycvpuwrr-muycvpuwrr.gz
 C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\w89p7n7vbb-{0}-jfsiqqwiad-jfsiqqwiad.gz
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\dxqj2xv6zo-{0}-0u6w0td05z-0u6w0td05z.gz
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\zt0mdot0v5-{0}-e0z1goekgi-e0z1goekgi.gz
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\eo785enrre-{0}-v5yntwhehw-v5yntwhehw.gz
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\obj\Debug\net10.0\compressed\wpz0wag3v8-{0}-v5yntwhehw-v5yntwhehw.gz
+C:\Users\Oleksii#\Desktop\NEA\BusinessInventoryManager\bin\Debug\net10.0\BCrypt.Net-Next.dll

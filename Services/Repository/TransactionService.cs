@@ -42,7 +42,7 @@ namespace WebApplication2.Services.Repository
 
         public async Task<TransactionModel> RecordPurchaseAsync(int businessId, int productId, int quantity, double unitPrice, string? notes = null)
         {
-            // Update product quantity (increase)
+
             var product = await _productRepository.GetById(productId);
             if (product == null)
             {
@@ -53,7 +53,7 @@ namespace WebApplication2.Services.Repository
             product.UpdatedAt = DateTime.UtcNow;
             await _productRepository.Update(product);
 
-            // Create transaction record
+
             var transaction = new TransactionModel
             {
                 BusinessId = businessId,
@@ -71,7 +71,7 @@ namespace WebApplication2.Services.Repository
 
         public async Task<TransactionModel> RecordSaleAsync(int businessId, int productId, int quantity, double unitPrice, string? notes = null)
         {
-            // Update product quantity (decrease)
+
             var product = await _productRepository.GetById(productId);
             if (product == null)
             {
@@ -87,7 +87,7 @@ namespace WebApplication2.Services.Repository
             product.UpdatedAt = DateTime.UtcNow;
             await _productRepository.Update(product);
 
-            // Create transaction record
+
             var transaction = new TransactionModel
             {
                 BusinessId = businessId,
@@ -105,7 +105,7 @@ namespace WebApplication2.Services.Repository
 
         public async Task<TransactionModel> RecordAdjustmentAsync(int businessId, int productId, int quantity, string? notes = null)
         {
-            // Update product quantity (can be positive or negative)
+
             var product = await _productRepository.GetById(productId);
             if (product == null)
             {
@@ -120,7 +120,7 @@ namespace WebApplication2.Services.Repository
             product.UpdatedAt = DateTime.UtcNow;
             await _productRepository.Update(product);
 
-            // Create transaction record
+
             var transaction = new TransactionModel
             {
                 BusinessId = businessId,
@@ -144,8 +144,6 @@ namespace WebApplication2.Services.Repository
                 return false;
             }
 
-            // Note: We don't reverse the stock changes when deleting a transaction
-            // This should be handled separately if needed
             return await _transactionRepository.DeleteAsync(id);
         }
     }

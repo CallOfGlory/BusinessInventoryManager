@@ -1,0 +1,41 @@
+@model WebApplication2.ViewModels.Settings.CreateUserViewModel
+@{
+    ViewData["Title"] = "Create User";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4"><i class="bi bi-people me-2"></i>Create User</h2>
+
+    <form asp-action="CreateUser" method="post" class="card border-0 shadow-sm p-4">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="col-md-6">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mt-4 d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-check-lg me-2"></i>Create User
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Script {
+    <partial name="_ValidationScriptsPartial" />
+}

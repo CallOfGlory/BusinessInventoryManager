@@ -53,6 +53,7 @@ namespace WebApplication2.Controllers
             return View(productViewModels);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -63,6 +64,7 @@ namespace WebApplication2.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(ProductViewModel model)
         {
             if (!ModelState.IsValid) return View(model);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using WebApplication2.Models;
 using WebApplication2.Services.Interface;
 using WebApplication2.ViewModels.Settings;
 
@@ -11,11 +12,13 @@ namespace WebApplication2.Controllers
     {
         private readonly IEnteranceService _userService;
         private readonly IClaimsService _claimsService;
+        private readonly IBusinessService _businessService;
 
-        public SettingsController(IEnteranceService userService, IClaimsService claimsService)
+        public SettingsController(IEnteranceService userService, IClaimsService claimsService, IBusinessService businessService)
         {
             _userService = userService;
             _claimsService = claimsService;
+            _businessService = businessService;
         }
 
         public async Task<IActionResult> Index()
@@ -36,6 +39,25 @@ namespace WebApplication2.Controllers
                 CreatedAt = user.CreatedAt,
                 LastLoginAt = user.LastLoginAt
             };
+
+            if (User.IsInRole("Admin"))
+            {
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
+                if (activeBusiness != null)
+                {
+                    var team = await _userService.GetUsersByBusinessIdAsync(activeBusiness.Id);
+                    model.TeamMembers = team
+                        .Where(u => u.Id != userId)
+                        .Select(u => new TeamMemberViewModel
+                        {
+                            Id = u.Id,
+                            Username = u.Username,
+                            Email = u.Email,
+                            Role = u.Role.ToString()
+                        })
+                        .ToList();
+                }
+            }
 
             return View(model);
         }
@@ -86,5 +108,69 @@ namespace WebApplication2.Controllers
                 return View(model);
             }
         }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult CreateUser()
+        {
+            return View(new CreateUserViewModel());
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateUser(CreateUserViewModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            try
+            {
+                int ownerId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+                var activeBusiness = await _businessService.GetActiveBusinessAsync(ownerId);
+                if (activeBusiness == null)
+                {
+                    ModelState.AddModelError("", "Please select an active business first.");
+                    return View(model);
+                }
+                var newUser = new UserModel
+                {
+                    Username = model.Username,
+                    Email = model.Email,
+                    PasswordHash = model.Password,
+                    Role = UserRole.Staff,
+                    BusinessId = activeBusiness.Id
+                };
+
+                await _userService.CreateUserAsync(newUser);
+                TempData["Success"] = "User created successfully!";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveTeamMember(int id)
+        {
+            int ownerId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+            var activeBusiness = await _businessService.GetActiveBusinessAsync(ownerId);
+            if (activeBusiness == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var member = await _userService.GetUserByIdAsync(id);
+            if (member == null || member.BusinessId != activeBusiness.Id || member.Role != UserRole.Staff)
+            {
+                return RedirectToAction("Index");
+            }
+
+            await _userService.DeleteUserAsync(id);
+            TempData["Success"] = "Team member removed successfully!";
+            return RedirectToAction("Index");
+        }
+
     }
 }

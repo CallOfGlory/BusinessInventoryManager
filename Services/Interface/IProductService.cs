@@ -10,6 +10,7 @@ namespace WebApplication2.Services.Interface
         Task<List<ProductModel>> GetUserProductsAsync(int userId);
         Task<List<ProductModel>> GetBusinessProductsAsync(int businessId);
         Task<ProductModel?> GetProductByIdAsync(int productId, int userId);
+        Task<ProductModel?> GetProductByIdForBusinessAsync(int productId, int businessId);
         Task<List<ProductModel>> GetLowStockProductsAsync(int businessId, int threshold = 10);
         Task<List<ProductModel>> SearchProductsAsync(int businessId, string searchTerm);
     }

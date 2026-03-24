@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.Services.Interface
+namespace WebApplication2.Services.Interface
 {
     public interface IValidationService
     {

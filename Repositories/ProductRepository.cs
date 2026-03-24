@@ -76,7 +76,7 @@ namespace WebApplication2.Repositories
             var product = await _context.Products.FindAsync(productId);
             if (product == null) return false;
 
-            // Soft delete - just mark as inactive
+           
             product.IsActive = false;
             product.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();

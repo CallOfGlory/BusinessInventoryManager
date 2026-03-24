@@ -29,13 +29,13 @@ namespace WebApplication2.Services.Repository
                 throw new Exception("Invalid email or password");
             }
 
-            // Verify password hash
+           
             if (!_passwordService.VerifyPassword(userModel.PasswordHash, userReceived.PasswordHash))
             {
                 throw new Exception("Invalid email or password");
             }
 
-            // Update last login
+           
             userReceived.LastLoginAt = DateTime.UtcNow;
             await _entranceRepository.Update(userReceived);
 
@@ -50,7 +50,7 @@ namespace WebApplication2.Services.Repository
                 throw new Exception("Email already exists");
             }
 
-            // Hash the password
+           
             string passwordHash = _passwordService.HashPassword(userModel.PasswordHash);
 
             UserModel newUser = new UserModel
@@ -60,13 +60,14 @@ namespace WebApplication2.Services.Repository
                 Username = userModel.Username ?? userModel.Email.Split('@')[0],
                 FirstName = userModel.FirstName,
                 LastName = userModel.LastName,
+                Role = UserRole.Admin,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
             UserModel registeredUser = await _entranceRepository.Add(newUser);
 
-            // Create a default business for the new user
+           
             var defaultBusiness = new BusinessModel
             {
                 UserId = registeredUser.Id,
@@ -84,9 +85,40 @@ namespace WebApplication2.Services.Repository
             return registeredUser;
         }
 
+        public async Task<UserModel> CreateUserAsync(UserModel userModel)
+        {
+            UserModel? existingUser = await _entranceRepository.GetByEmail(userModel.Email);
+            if (existingUser != null)
+            {
+                throw new Exception("Email already exists");
+            }
+
+            string passwordHash = _passwordService.HashPassword(userModel.PasswordHash);
+
+            UserModel newUser = new UserModel
+            {
+                Email = userModel.Email,
+                PasswordHash = passwordHash,
+                Username = userModel.Username ?? userModel.Email.Split('@')[0],
+                FirstName = userModel.FirstName,
+                LastName = userModel.LastName,
+                Role = UserRole.Staff,
+                BusinessId = userModel.BusinessId,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            return await _entranceRepository.Add(newUser);
+        }
+
         public async Task<UserModel?> GetUserByIdAsync(int userId)
         {
             return await _entranceRepository.GetById(userId);
+        }
+
+        public async Task<List<UserModel>> GetUsersByBusinessIdAsync(int businessId)
+        {
+            return await _entranceRepository.GetByBusinessId(businessId);
         }
 
         public async Task<UserModel> UpdateUserAsync(UserModel user)
@@ -113,6 +145,11 @@ namespace WebApplication2.Services.Repository
             await _entranceRepository.Update(user);
 
             return true;
+        }
+
+        public async Task<bool> DeleteUserAsync(int userId)
+        {
+            return await _entranceRepository.Delete(userId);
         }
     }
 }

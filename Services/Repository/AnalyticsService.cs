@@ -50,7 +50,7 @@ namespace WebApplication2.Services.Repository
                 .Take(5)
                 .ToList();
 
-            // Calculate totals
+           
             var salesToday = todayTransactions
                 .Where(t => t.Type == TransactionType.Sale)
                 .Sum(t => t.TotalAmount);
@@ -59,7 +59,7 @@ namespace WebApplication2.Services.Repository
                 .Where(t => t.Type == TransactionType.Sale)
                 .Sum(t => t.TotalAmount);
 
-            // Calculate profit
+           
             var profitThisMonth = monthTransactions
                 .Where(t => t.Type == TransactionType.Sale && t.Product != null)
                 .Sum(t => (t.UnitPrice - t.Product!.PurchasePrice) * t.Quantity);

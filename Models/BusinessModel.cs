@@ -12,7 +12,7 @@ namespace WebApplication2.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+       
         public UserModel? User { get; set; }
         public ICollection<ProductModel> Products { get; set; } = new List<ProductModel>();
         public ICollection<TransactionModel> Transactions { get; set; } = new List<TransactionModel>();

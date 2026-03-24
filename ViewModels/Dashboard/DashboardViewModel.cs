@@ -4,13 +4,13 @@ namespace WebApplication2.ViewModels.Dashboard
 {
     public class DashboardViewModel
     {
-        // Active Business Info
+       
         public int? ActiveBusinessId { get; set; }
         public string? ActiveBusinessName { get; set; }
         public string CurrencySymbol { get; set; } = "$";
         public bool HasActiveBusiness { get; set; }
 
-        // Summary Statistics
+       
         public int TotalProducts { get; set; }
         public int LowStockProducts { get; set; }
         public double TotalInventoryValue { get; set; }
@@ -20,11 +20,11 @@ namespace WebApplication2.ViewModels.Dashboard
         public int TransactionsToday { get; set; }
         public int TransactionsThisMonth { get; set; }
 
-        // Recent Activity
+       
         public IEnumerable<TransactionViewModel> RecentTransactions { get; set; } = new List<TransactionViewModel>();
         public IEnumerable<LowStockProductViewModel> LowStockItems { get; set; } = new List<LowStockProductViewModel>();
 
-        // User Info
+       
         public string Username { get; set; } = string.Empty;
         public int TotalBusinesses { get; set; }
     }

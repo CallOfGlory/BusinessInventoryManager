@@ -66,6 +66,16 @@ namespace WebApplication2.Services.Repository
             return product;
         }
 
+        public async Task<ProductModel?> GetProductByIdForBusinessAsync(int productId, int businessId)
+        {
+            var product = await _productRepository.GetById(productId);
+            if (product == null || product.BusinessId != businessId)
+            {
+                return null;
+            }
+            return product;
+        }
+
         public async Task<List<ProductModel>> GetLowStockProductsAsync(int businessId, int threshold = 10)
         {
             return await _productRepository.GetLowStockProducts(businessId, threshold);

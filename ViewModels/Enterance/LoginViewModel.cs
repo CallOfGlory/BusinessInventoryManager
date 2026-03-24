@@ -1,4 +1,4 @@
-﻿namespace WebApplication2.ViewModels.Enterance;
+namespace WebApplication2.ViewModels.Enterance;
 using System.ComponentModel.DataAnnotations;
 
 public class LoginViewModel

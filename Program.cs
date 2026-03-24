@@ -14,19 +14,10 @@ namespace WebApplication2
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Database Configuration
             builder.Services.AddDbContext<ApplicationContext>(opts =>
             {
                 opts.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-
-            // Uncomment for in-memory database (development/testing)
-            //builder.Services.AddDbContext<ApplicationContext>(opts =>
-            //{
-            //    opts.UseInMemoryDatabase("BusinessInventoryManagement");
-            //});
-
-            // Authentication Configuration
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -42,13 +33,10 @@ namespace WebApplication2
 
             builder.Services.AddAuthorization();
 
-            // Repositories (Data Access)
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IEntranceRepository, EntranceRepository>();
             builder.Services.AddScoped<IBusinessRepository, BusinessRepository>();
             builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
-
-            // Services (Business Logic)
             builder.Services.AddScoped<IPasswordService, PasswordService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IEnteranceService, EnteranceService>();
@@ -66,7 +54,6 @@ namespace WebApplication2
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Configure the HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");

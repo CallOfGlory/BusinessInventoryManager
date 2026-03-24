@@ -7,6 +7,7 @@ namespace WebApplication2.Interface
         Task<UserModel> Add(UserModel userModel);
         Task<UserModel?> GetByEmail(string email);
         Task<UserModel?> GetById(int id);
+        Task<List<UserModel>> GetByBusinessId(int businessId);
         Task<UserModel> Update(UserModel userModel);
         Task<bool> Delete(int id);
     }

@@ -17,7 +17,7 @@
                     <form asp-action="Create" method="post">
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                        <!-- Transaction Type Selection -->
+                        
                         <div class="mb-4">
                             <label class="form-label fw-semibold">Transaction Type</label>
                             <div class="row g-3">
@@ -52,7 +52,7 @@
                             <span asp-validation-for="Type" class="text-danger small"></span>
                         </div>
 
-                        <!-- Product Selection -->
+                        
                         <div class="mb-4">
                             <label asp-for="ProductId" class="form-label fw-semibold">
                                 <i class="bi bi-box me-1"></i>Select Product
@@ -63,7 +63,7 @@
                             <span asp-validation-for="ProductId" class="text-danger small"></span>
                         </div>
 
-                        <!-- Product Info Card (shown when product selected) -->
+                        
                         <div id="productInfo" class="alert alert-info mb-4" style="display: none;">
                             <div class="row">
                                 <div class="col-md-4">
@@ -100,7 +100,7 @@
                             </div>
                         </div>
 
-                        <!-- Total Amount Preview -->
+                        
                         <div class="alert alert-secondary mb-4">
                             <div class="d-flex justify-content-between align-items-center">
                                 <span class="fw-semibold">Total Amount:</span>
@@ -137,7 +137,7 @@
     <script>
         const currencySymbol = '@Model.CurrencySymbol';
         
-        // Product selection handler
+       
         document.getElementById('productSelect').addEventListener('change', async function() {
             const productId = this.value;
             const productInfo = document.getElementById('productInfo');
@@ -156,7 +156,7 @@
                     document.getElementById('productSalePrice').textContent = currencySymbol + data.salePrice.toFixed(2);
                     productInfo.style.display = 'block';
 
-                    // Auto-fill price based on transaction type
+                   
                     updatePriceBasedOnType(data);
                 }
             } catch (error) {
@@ -164,7 +164,7 @@
             }
         });
 
-        // Transaction type change handler
+       
         document.querySelectorAll('input[name="Type"]').forEach(radio => {
             radio.addEventListener('change', function() {
                 const productSelect = document.getElementById('productSelect');
@@ -186,7 +186,7 @@
             calculateTotal();
         }
 
-        // Calculate total amount
+       
         function calculateTotal() {
             const quantity = parseFloat(document.getElementById('quantityInput').value) || 0;
             const price = parseFloat(document.getElementById('priceInput').value) || 0;

@@ -19,7 +19,6 @@ namespace WebApplication2.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // User relationships
             modelBuilder.Entity<UserModel>()
                 .HasMany(u => u.Products)
                 .WithOne(p => p.User)
@@ -30,7 +29,7 @@ namespace WebApplication2.Data
                 .HasMany(u => u.Businesses)
                 .WithOne(b => b.User)
                 .HasForeignKey(b => b.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserModel>()
                 .HasOne(u => u.Settings)
@@ -38,7 +37,12 @@ namespace WebApplication2.Data
                 .HasForeignKey<UserSettingsModel>(s => s.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Business relationships
+            modelBuilder.Entity<UserModel>()
+                .HasOne(u => u.Business)
+                .WithMany()
+                .HasForeignKey(u => u.BusinessId)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<BusinessModel>()
                 .HasMany(b => b.Products)
                 .WithOne(p => p.Business)
@@ -51,14 +55,12 @@ namespace WebApplication2.Data
                 .HasForeignKey(t => t.BusinessId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Transaction relationships
             modelBuilder.Entity<TransactionModel>()
                 .HasOne(t => t.Product)
                 .WithMany(p => p.Transactions)
                 .HasForeignKey(t => t.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Indexes
             modelBuilder.Entity<UserModel>()
                 .HasIndex(u => u.Email)
                 .IsUnique();

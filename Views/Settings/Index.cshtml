@@ -62,6 +62,50 @@
                     </a>
                 </div>
             </div>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="card border-0 shadow-sm mt-4">
+                    <div class="card-header bg-transparent"><h5 class="mb-0">User Management</h5></div>
+                    <div class="card-body">
+                        <p class="text-muted">Create accounts for staff and assign roles.</p>
+                        <a asp-action="CreateUser" class="btn btn-outline-primary">
+                            <i class="bi bi-person-plus me-2"></i>Create User
+                        </a>
+                        <div class="mt-4">
+                            <h6 class="mb-3">Team Members</h6>
+                            @if (!Model.TeamMembers.Any())
+                            {
+                                <p class="text-muted mb-0">No team members yet.</p>
+                            }
+                            else
+                            {
+                                <ul class="list-group list-group-flush">
+                                    @foreach (var member in Model.TeamMembers)
+                                    {
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <div class="fw-semibold">@member.Username</div>
+                                                <small class="text-muted">@member.Email</small>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-secondary">Staff</span>
+                                                <form asp-action="RemoveTeamMember" method="post">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@member.Id" />
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        Remove
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>

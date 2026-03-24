@@ -28,7 +28,6 @@ namespace WebApplication2.Controllers
             _claimsService = claimsService;
         }
 
-        // GET: Transactions
         public async Task<IActionResult> Index(DateTime? startDate, DateTime? endDate, string? type)
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -52,7 +51,6 @@ namespace WebApplication2.Controllers
                 transactions = await _transactionService.GetBusinessTransactionsAsync(activeBusiness.Id);
             }
 
-            // Filter by type if specified
             if (!string.IsNullOrEmpty(type) && Enum.TryParse<TransactionType>(type, out var transactionType))
             {
                 transactions = transactions.Where(t => t.Type == transactionType);
@@ -85,7 +83,6 @@ namespace WebApplication2.Controllers
             return View(viewModel);
         }
 
-        // GET: Transactions/Create
         public async Task<IActionResult> Create()
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -113,7 +110,6 @@ namespace WebApplication2.Controllers
             return View(viewModel);
         }
 
-        // POST: Transactions/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateTransactionViewModel model)
@@ -175,7 +171,6 @@ namespace WebApplication2.Controllers
             }
         }
 
-        // GET: Transactions/Details/5
         public async Task<IActionResult> Details(int id)
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -210,7 +205,6 @@ namespace WebApplication2.Controllers
             return View(viewModel);
         }
 
-        // POST: Transactions/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
@@ -236,12 +230,17 @@ namespace WebApplication2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // API endpoint for getting product details
         [HttpGet]
         public async Task<IActionResult> GetProductDetails(int productId)
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
-            var product = await _productService.GetProductByIdAsync(productId, userId);
+            var activeBusiness = await _businessService.GetActiveBusinessAsync(userId);
+            if (activeBusiness == null)
+            {
+                return BadRequest("No active business");
+            }
+
+            var product = await _productService.GetProductByIdForBusinessAsync(productId, activeBusiness.Id);
 
             if (product == null)
             {

@@ -25,6 +25,8 @@ namespace WebApplication2.Repositories
         public async Task<IEnumerable<BusinessModel>> GetByUserIdAsync(int userId)
         {
             return await _context.Businesses
+                .Include(b => b.Products)
+                .Include(b => b.Transactions)
                 .Where(b => b.UserId == userId)
                 .OrderByDescending(b => b.IsActive)
                 .ThenByDescending(b => b.UpdatedAt)
@@ -40,7 +42,7 @@ namespace WebApplication2.Repositories
 
         public async Task<BusinessModel> AddAsync(BusinessModel business)
         {
-            // If this is the first business, make it active
+           
             var existingBusinesses = await _context.Businesses
                 .Where(b => b.UserId == business.UserId)
                 .CountAsync();
@@ -75,7 +77,7 @@ namespace WebApplication2.Repositories
 
         public async Task<bool> SetActiveBusinessAsync(int userId, int businessId)
         {
-            // Deactivate all businesses for this user
+           
             var userBusinesses = await _context.Businesses
                 .Where(b => b.UserId == userId)
                 .ToListAsync();

@@ -18,12 +18,12 @@ namespace WebApplication2.Models
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+       
         public UserModel? User { get; set; }
         public BusinessModel? Business { get; set; }
         public ICollection<TransactionModel> Transactions { get; set; } = new List<TransactionModel>();
 
-        // Calculated properties
+       
         public double ProfitPerUnit => SalePrice - PurchasePrice;
         public double TotalInventoryValue => PurchasePrice * Quantity;
         public double PotentialProfit => ProfitPerUnit * Quantity;

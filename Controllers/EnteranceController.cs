@@ -8,16 +8,16 @@ namespace WebApplication2.Controllers;
 
 public class EnteranceController : Controller
 {
-    private readonly IEnteranceService _entranceService; // Змінено з IEntranceRepository на IEnteranceService
+    private readonly IEnteranceService _entranceService;
     private readonly IClaimsService _claimsService;
 
-    public EnteranceController(IEnteranceService entranceService, IClaimsService claimsService) // Змінено тип параметра
+    public EnteranceController(IEnteranceService entranceService, IClaimsService claimsService)
     {
         _entranceService = entranceService;
         _claimsService = claimsService;
     }
 
-    // GET
+
     public IActionResult Index()
     {
         return View();
@@ -34,6 +34,7 @@ public class EnteranceController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
@@ -41,13 +42,13 @@ public class EnteranceController : Controller
         UserModel user = new UserModel
         {
             Email = model.Email,
-            PasswordHash = model.Password // Password will be verified against hash
+            PasswordHash = model.Password
         };
 
         try
         {
             UserModel userReceived = await _entranceService.LoginAsync(user);
-            await _claimsService.AddClaimsAsync(userReceived.Id, userReceived.Email, HttpContext);
+            await _claimsService.AddClaimsAsync(userReceived.Id, userReceived.Email, userReceived.Role.ToString(), HttpContext);
             return RedirectToAction("Index", "Home");
         }
         catch (Exception e)
@@ -58,6 +59,7 @@ public class EnteranceController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
@@ -66,13 +68,13 @@ public class EnteranceController : Controller
         {
             Username = model.Username,
             Email = model.Email,
-            PasswordHash = model.Password // Will be hashed in service
+            PasswordHash = model.Password
         };
 
         try
         {
             UserModel userReceived = await _entranceService.RegisterAsync(user);
-            await _claimsService.AddClaimsAsync(userReceived.Id, userReceived.Email, HttpContext);
+            await _claimsService.AddClaimsAsync(userReceived.Id, userReceived.Email, userReceived.Role.ToString(), HttpContext);
             return RedirectToAction("Index", "Home");
         }
         catch (Exception e)
@@ -83,6 +85,7 @@ public class EnteranceController : Controller
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync();

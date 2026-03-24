@@ -28,10 +28,11 @@ namespace WebApplication2.ViewModels.Business
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        // Statistics
+       
         public int ProductCount { get; set; }
         public int TransactionCount { get; set; }
         public double TotalInventoryValue { get; set; }
+        public IEnumerable<TeamMemberViewModel> TeamMembers { get; set; } = new List<TeamMemberViewModel>();
     }
 
     public class BusinessListViewModel
@@ -59,5 +60,13 @@ namespace WebApplication2.ViewModels.Business
         [StringLength(5, ErrorMessage = "Currency symbol cannot exceed 5 characters")]
         [Display(Name = "Currency Symbol")]
         public string CurrencySymbol { get; set; } = "$";
+    }
+
+    public class TeamMemberViewModel
+    {
+        public int Id { get; set; }
+        public string Username { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Role { get; set; } = string.Empty;
     }
 }

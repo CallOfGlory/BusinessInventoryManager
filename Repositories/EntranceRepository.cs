@@ -47,6 +47,13 @@ namespace WebApplication2.Repositories
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<List<UserModel>> GetByBusinessId(int businessId)
+        {
+            return await _context.Users
+                .Where(u => u.BusinessId == businessId)
+                .ToListAsync();
+        }
+
         public async Task<UserModel> Update(UserModel userModel)
         {
             var existingUser = await _context.Users.FindAsync(userModel.Id);
@@ -61,6 +68,8 @@ namespace WebApplication2.Repositories
             existingUser.FirstName = userModel.FirstName;
             existingUser.LastName = userModel.LastName;
             existingUser.Phone = userModel.Phone;
+            existingUser.Role = userModel.Role;
+            existingUser.BusinessId = userModel.BusinessId;
             existingUser.UpdatedAt = DateTime.UtcNow;
             existingUser.LastLoginAt = userModel.LastLoginAt;
 

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace WebApplication2.ViewModels.Enterance;
@@ -13,8 +13,8 @@ public class RegisterViewModel
     [Remote(action: "CheckEmail", controller: "Validation", ErrorMessage = "The email is already in use")]
     public string Email { get; set; }
 
-    [Required(ErrorMessage = "Enter Password")] // Додайте це
-    [MinLength(6, ErrorMessage = "Password must be at least 6 characters")] // Додайте це
+    [Required(ErrorMessage = "Enter Password")]
+    [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
     public string Password { get; set; }
 
     [Compare("Password", ErrorMessage = "Passwords do not match")]

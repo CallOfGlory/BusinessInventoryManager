@@ -13,7 +13,7 @@ namespace WebApplication2.ViewModels.Transactions
         public DateTime? FilterEndDate { get; set; }
         public string? FilterType { get; set; }
         
-        // Summary
+       
         public int TotalTransactions { get; set; }
         public double TotalSales { get; set; }
         public double TotalPurchases { get; set; }
@@ -59,11 +59,11 @@ namespace WebApplication2.ViewModels.Transactions
         [Display(Name = "Transaction Date")]
         public DateTime TransactionDate { get; set; } = DateTime.Now;
 
-        // For dropdown
+       
         public IEnumerable<SelectListItem> Products { get; set; } = new List<SelectListItem>();
         public string CurrencySymbol { get; set; } = "$";
         
-        // Product details for JS
+       
         public double? ProductPurchasePrice { get; set; }
         public double? ProductSalePrice { get; set; }
         public int? ProductCurrentStock { get; set; }

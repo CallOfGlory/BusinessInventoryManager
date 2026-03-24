@@ -11,7 +11,7 @@ namespace WebApplication2.Models
         public int LowStockThreshold { get; set; } = 10;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation property
+       
         public UserModel? User { get; set; }
     }
 }

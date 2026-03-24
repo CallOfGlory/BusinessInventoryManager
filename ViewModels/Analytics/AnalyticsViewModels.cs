@@ -5,11 +5,11 @@ namespace WebApplication2.ViewModels.Analytics
         public string BusinessName { get; set; } = string.Empty;
         public string CurrencySymbol { get; set; } = "$";
         
-        // Date Range
+       
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        // Profit Analytics
+       
         public double TotalRevenue { get; set; }
         public double TotalCost { get; set; }
         public double GrossProfit { get; set; }
@@ -17,14 +17,14 @@ namespace WebApplication2.ViewModels.Analytics
         public int TotalTransactions { get; set; }
         public int TotalUnitsSold { get; set; }
 
-        // Inventory
+       
         public double TotalInventoryValue { get; set; }
         public int TotalProducts { get; set; }
 
-        // Top Products
+       
         public IEnumerable<TopProductViewModel> TopProducts { get; set; } = new List<TopProductViewModel>();
 
-        // Sales Trends (for chart)
+       
         public IEnumerable<SalesTrendViewModel> SalesTrends { get; set; } = new List<SalesTrendViewModel>();
     }
 

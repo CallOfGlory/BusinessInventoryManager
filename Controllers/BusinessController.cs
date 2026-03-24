@@ -13,18 +13,20 @@ namespace WebApplication2.Controllers
         private readonly IBusinessService _businessService;
         private readonly IClaimsService _claimsService;
         private readonly IAnalyticsService _analyticsService;
+        private readonly IEnteranceService _enteranceService;
 
         public BusinessController(
             IBusinessService businessService, 
             IClaimsService claimsService,
-            IAnalyticsService analyticsService)
+            IAnalyticsService analyticsService,
+            IEnteranceService enteranceService)
         {
             _businessService = businessService;
             _claimsService = claimsService;
             _analyticsService = analyticsService;
+            _enteranceService = enteranceService;
         }
 
-        // GET: Business
         public async Task<IActionResult> Index()
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -51,15 +53,15 @@ namespace WebApplication2.Controllers
             return View(viewModel);
         }
 
-        // GET: Business/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View(new CreateBusinessViewModel());
         }
 
-        // POST: Business/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(CreateBusinessViewModel model)
         {
             if (!ModelState.IsValid)
@@ -92,7 +94,7 @@ namespace WebApplication2.Controllers
             }
         }
 
-        // GET: Business/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id)
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -118,9 +120,9 @@ namespace WebApplication2.Controllers
             return View(viewModel);
         }
 
-        // POST: Business/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, BusinessViewModel model)
         {
             if (id != model.Id)
@@ -159,9 +161,9 @@ namespace WebApplication2.Controllers
             }
         }
 
-        // POST: Business/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             try
@@ -178,9 +180,9 @@ namespace WebApplication2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // POST: Business/SetActive/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> SetActive(int id)
         {
             try
@@ -197,7 +199,6 @@ namespace WebApplication2.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: Business/Details/5
         public async Task<IActionResult> Details(int id)
         {
             int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
@@ -225,7 +226,45 @@ namespace WebApplication2.Controllers
                 TotalInventoryValue = inventoryValue
             };
 
+            if (User.IsInRole("Admin"))
+            {
+                var team = await _enteranceService.GetUsersByBusinessIdAsync(business.Id);
+                viewModel.TeamMembers = team
+                    .Where(u => u.Id != userId)
+                    .Select(u => new TeamMemberViewModel
+                    {
+                        Id = u.Id,
+                        Username = u.Username,
+                        Email = u.Email,
+                        Role = u.Role.ToString()
+                    })
+                    .ToList();
+            }
+
             return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveTeamMember(int id, int businessId)
+        {
+            int userId = await _claimsService.GetClaimCertain<int>(HttpContext, ClaimTypes.NameIdentifier);
+            var business = await _businessService.GetBusinessByIdAsync(businessId, userId);
+            if (business == null)
+            {
+                return NotFound();
+            }
+
+            var member = await _enteranceService.GetUserByIdAsync(id);
+            if (member == null || member.BusinessId != business.Id || member.Role != UserRole.Staff)
+            {
+                return RedirectToAction("Details", new { id = businessId });
+            }
+
+            await _enteranceService.DeleteUserAsync(id);
+            TempData["SuccessMessage"] = "Team member removed successfully!";
+            return RedirectToAction("Details", new { id = businessId });
         }
     }
 }

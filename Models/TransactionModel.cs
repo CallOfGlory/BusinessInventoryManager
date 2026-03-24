@@ -2,9 +2,9 @@ namespace WebApplication2.Models
 {
     public enum TransactionType
     {
-        Purchase,   // Закупівля товару (надходження на склад)
-        Sale,       // Продаж товару
-        Adjustment  // Коригування залишків
+        Purchase,  
+        Sale,      
+        Adjustment 
     }
 
     public class TransactionModel
@@ -20,7 +20,7 @@ namespace WebApplication2.Models
         public DateTime TransactionDate { get; set; } = DateTime.UtcNow;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+       
         public BusinessModel? Business { get; set; }
         public ProductModel? Product { get; set; }
     }
